@@ -1,0 +1,21 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "*.tcc": "c",
+        "fstream": "c",
+        "iomanip": "c",
+        "istream": "c",
+        "ostream": "c",
+        "unistd.h": "c",
+        "graphics.h": "c",
+        "definitions.h": "c",
+        "optional": "c",
+        "functional": "c",
+        "random": "c",
+        "future": "c",
+        "mutex": "c",
+        "sstream": "c",
+        "stop_token": "c",
+        "streambuf": "c"
+    }
+}
