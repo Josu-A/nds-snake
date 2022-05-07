@@ -129,18 +129,10 @@ void initBackgrounds() {
 
     
     /**
-     *  Bigarren mailako pantailako 3 fondoaren afinitatea ezarri 16 biteko koloretarako. 
+     *  Bigarren mailako pantailako 3 fondoaren afinitatea ezarri 8 biteko koloretarako. 
      */
     bg3Sub = bgInitSub(3, BgType_Bmp8, BgSize_B8_256x256, 1, 0);
     REG_BG3CNT_SUB |= BG_PRIORITY(BG_PRIORITY_3); // Lehentasun baxua
-}
-
-void initSprites()
-{
-    oamInit(&oamMain, SpriteMapping_1D_128, false);   // Jadanik oamUpdate(&oamMain) exekutatzen du
-    oamInit(&oamSub, SpriteMapping_1D_128, false);    // Jadanik oamUpdate(&oamSub) exekutatzen du
-
-    configureSnake(&snake);
 }
 
 /**

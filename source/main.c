@@ -7,6 +7,7 @@
 #include "graphics.h"
 #include "sprites.h"
 #include "jokoa01.h"
+#include "peripherals.h"
 
 int main(void)
 {

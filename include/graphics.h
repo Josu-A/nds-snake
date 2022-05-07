@@ -9,7 +9,4 @@ extern void hasieratuGrafikoakSpriteak();
 
 extern int bg3Sub;
 
-extern PrintConsole topScreenConsole;
-extern PrintConsole bottomScreenConsole;
-
 #endif

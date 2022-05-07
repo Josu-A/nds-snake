@@ -5,10 +5,9 @@
 
 #include "definitions.h"
 #include "sprites.h"
+#include "objectSnake.h"
 
 #include "snake.h"
-
-Snake snake;
 
 void initSnake(Snake* sprite, u8* gfx)
 {
@@ -26,7 +25,7 @@ void animateSnake(Snake* sprite)
                      SNAKE_DIMENSION*SNAKE_DIMENSION);
 }
 
-void showSnake()
+void saveIntoMemorySnake()
 {
     dmaCopyHalfWords(DMA_CHANNEL,
                      snakePal,
@@ -34,14 +33,7 @@ void showSnake()
                      snakePalLen);
 }
 
-void configureSnake(Snake* sprite)
-{
-    sprite->x = SCREEN_WIDTH / 2;
-    sprite->y = SCREEN_HEIGHT / 2;
-    initSnake(&snake, (u8*) snakeTiles);
-}
-
-void displaySnake(Snake* sprite)
+void displaySnake(Snake *sprite)
 {
     oamSet(&oamMain,
            0,
@@ -58,4 +50,31 @@ void displaySnake(Snake* sprite)
            false,
            false,
            false);
+}
+
+void hideSnake(Snake *sprite)
+{
+    oamSet(&oamMain,
+           0,
+           sprite->x,
+           sprite->y,
+           0,
+           0,
+           SpriteSize_32x32,
+           SpriteColorFormat_256Color,
+           sprite->spriteGfxMem,
+           -1,
+           false,
+           true,
+           false,
+           false,
+           false);
+}
+
+void initSprites()
+{
+    oamInit(&oamMain, SpriteMapping_1D_128, false);   // Jadanik oamUpdate(&oamMain) exekutatzen du
+    oamInit(&oamSub, SpriteMapping_1D_128, false);    // Jadanik oamUpdate(&oamSub) exekutatzen du
+
+    initSnake(&snake, (u8*) snakeTiles);
 }

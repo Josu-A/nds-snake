@@ -4,6 +4,16 @@
 #include "definitions.h"
 
 /*!
+ *  \brief Mota guztietako eten guztiak baimentzen ditu
+ */
+#define allowAllInterrupts() REG_IME = IME_ENABLE
+
+/*!
+ *  \brief Mota guztietako eten guztiak galarazten ditu
+ */
+#define denyAllInterrupts() REG_IME = IME_DISABLE
+
+/*!
  * \brief Teklatuko botoiak sinkronizatzen ditu etenen bidez edo inkesta bidez
  *        indibidualki emandako TEK_konf aldagaiarekin.
  * 
