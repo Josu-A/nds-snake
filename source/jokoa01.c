@@ -12,18 +12,51 @@
 #include "objectSnake.h"
 #include "sprites.h"
 
-
+/*!
+ * \brief Automataren egoera gordeko duen aldagai globala.
+ */
 AUTOMATON_STATES AUTOMATON_STATE;
+
+/*!
+ *  \brief Ukimen-pantailari buruz informazioa gordetzen du.
+ */
 touchPosition PANT_DAT;
 
+/*!
+ * \brief Aukeratutako jolas modua gordetzen duen aldagai globala.
+ */
 GAME_MODES selectedGameMode = GAMEMODE_NONE;
 
+/*!
+ * \brief Partidako puntuazioa gordetzen du.
+ */
 int score;
+
+/*!
+ * \brief Jolasa amaitzean aukeraketa pantailara joateko gelditzen den denbora
+ * etenalditan.
+ */
 int endingTimer;
+
+/*!
+ * \brief Jolasa amaitzean aukeraketa pantailara joateko gelditzen den denbora
+ * segundutan.
+ */
 int endingTimerNormalized;
+
+/*!
+ * \brief Jolasteko gelditzen den denbora etenalditan.
+ */
 int timeLeftToPlay;
+
+/*!
+ * \brief Jolasteko gelditzen den denbora segundutan.
+ */
 int timeLeftToPlayNormalized;
 
+/*!
+ * \brief Jolasa berriz jokatu ahal izateko konfiguratzen ditu aldagaiak.
+ */
 void resetGameConfig()
 {
 	score = 0; // Reset score to 0
@@ -37,6 +70,10 @@ void resetGameConfig()
 	setDefaultRotationSnake(&snake);
 }
 
+/*!
+ * \brief Ukimen pantaila ukitu den itzultzen du, true (1) gisa. Ez bada ukitu,
+ * false (0) itzultzen du.
+ */
 bool touchedTouchScreen(touchPosition *touchPad)
 {
 	return (touchPad->px != 0 || touchPad->py != 0);

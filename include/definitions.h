@@ -1,87 +1,155 @@
 #ifndef _DEFINITIONS_H_
 #define _DEFINITIONS_H_
 
-#include <nds.h>		//nds-rako garatuta dagoen liburutegia
-#include <stdio.h>		//c-ko liburutegi estandarra sarrera eta irteerako funtzioak definitzen dituena
-#include <stdlib.h>		//c-ko liburutegi estandarra memoria erreserbak eta zenbaki konbertsioak egiteko
-#include <unistd.h>		//Sistema eragileen arteko konpatibilitatea ziurtatzeko liburutegia
+#include <nds.h>
 
 /*!
- * \brief Irudiak memorian kopiatzeko DMA kanala aukeratu
+ * \brief Irudiak memorian kopiatzeko DMA kanala gordetzen du.
  */
 #define DMA_CHANNEL 3
 
-/******************************************************************************
- * begin { TouchScreen }
-******************************************************************************/
-
 /*!
- *  \brief Ukimen-pantailaren erregistroa
+ *  \brief Ukimen-pantailari buruz informazioa gordetzen du.
  */
 extern touchPosition PANT_DAT;
-
-/******************************************************************************
- * end { TouchScreen }
-******************************************************************************/
 
 /******************************************************************************
  * begin { Automata }
 ******************************************************************************/
 
 /*!
- * \brief Automataren egoera posibleak gordetzen ditu.
+ * \brief Automatak izan ditzakeen egoera posibleak gordetzen ditu.
  */
 typedef enum AUTOMATON_STATES {
-    AUTOMATON_START, // Jokoa irekitzean
-    AUTOMATON_SELECTION, // Joko mota aukeratzen
-    AUTOMATON_PLAYING, // Jolasten
-    AUTOMATON_PAUSED, // Jokoa pausatuta
-    AUTOMATON_ENDING // Jokoa amaituta
+    AUTOMATON_START, // Jokoa irekitzean du
+    AUTOMATON_SELECTION, // Joko mota aukeraketan du
+    AUTOMATON_PLAYING, // Jolasean du
+    AUTOMATON_PAUSED, // Jokoa pausatuta dagoenean du
+    AUTOMATON_ENDING // Jokoa amaituta denean
 } AUTOMATON_STATES;
 
 /*!
- * \brief Automataren egoera gordeko duen aldagaia deklaratzen da c
- * fitxategi batean.
+ * \brief Automataren egoera gordeko duen aldagai globala.
  */
 extern AUTOMATON_STATES AUTOMATON_STATE;
 
+/*!
+ * \brief Jolasak izan ditzakeen moduak gordetzen ditu.
+ */
 typedef enum GAME_MODES {
-    GAMEMODE_NONE,
-    GAMEMODE_LIMITED,
-    GAMEMODE_UNLIMITED
+    GAMEMODE_NONE, // Modurik aukeratuta ez dago
+    GAMEMODE_LIMITED, // Jolasa bukatu egiten da puntuazio maximoa lortzean
+    GAMEMODE_UNLIMITED // Jolasa denbora bukatzean bakarrik amaitzen da
 } GAME_MODES;
 
+/*!
+ * \brief Aukeratutako jolas modua gordetzen duen aldagai globala.
+ */
 extern GAME_MODES selectedGameMode;
+
+/*!
+ * \brief Jolasa berriz jokatu ahal izateko konfiguratzen ditu aldagaiak.
+ */
 extern void resetGameConfig();
 
 /******************************************************************************
  * end { Automata }
 ******************************************************************************/
 
+/******************************************************************************
+ * begin { Kontsola }
+******************************************************************************/
+
+/*!
+ * \brief Goiko pantailako kontsola kontrolatzeko datuak gordetzen ditu.
+ */
 extern PrintConsole topScreenConsole;
+
+/*!
+ * \brief Beheko pantailako kontsola kontrolatzeko datuak gordetzen ditu.
+ */
 extern PrintConsole bottomScreenConsole;
+
+/******************************************************************************
+ * end { Kontsola }
+******************************************************************************/
 
 /******************************************************************************
  * begin { Denboragailua }
 ******************************************************************************/
 
+/*!
+ * \brief Timer0-ren zerbitzu errutinak segunduro zenbat eten sortu behar
+ * dituen gordetzen du.
+ */
 #define ETEN_SEGUNDOKO 4
+
+/*!
+ * \brief Segundo erdia igarotzeko gertatu behar den eten kopurua da.
+ */
 #define SEG_0_5 (ETEN_SEGUNDOKO / 2)
+
+/*!
+ * \brief Segundo bat igarotzeko gertatu behar den eten kopurua da.
+ */
 #define SEG_1 (ETEN_SEGUNDOKO * 1)
+
+/*!
+ * \brief Jolasa bukatzeko dauden segundu kopurua.
+ */
 #define MAX_GAME_TIME_NORMALIZED 20
+
+/*!
+ * \brief Jolasa bukatzeko dauden eten kopurua.
+ */
 #define MAX_GAME_TIME (ETEN_SEGUNDOKO * MAX_GAME_TIME_NORMALIZED)
+
+/*!
+ * \brief Jokoa amaitzean jolas mota aukeraketara itzultzeko dauden segundu
+ * maximoak.
+ */
 #define MAX_END_TIME_NORMALIZED 10
+
+/*!
+ * \brief Jokoa amaitzean jolas mota aukeraketara itzultzeko dauden eten
+ * kopuru maximoak.
+ */
 #define MAX_END_TIME (ETEN_SEGUNDOKO * MAX_END_TIME_NORMALIZED)
+
+/*!
+ * \brief Jolasteko gelditzen den denbora etenalditan.
+ */
 extern int timeLeftToPlay;
+
+/*!
+ * \brief Jolasteko gelditzen den denbora segundutan.
+ */
 extern int timeLeftToPlayNormalized;
+
+/*!
+ * \brief Jolasa amaitzean aukeraketa pantailara joateko gelditzen den denbora
+ * etenalditan.
+ */
 extern int endingTimer;
+
+/*!
+ * \brief Jolasa amaitzean aukeraketa pantailara joateko gelditzen den denbora
+ * segundutan.
+ */
 extern int endingTimerNormalized;
 
 /******************************************************************************
  * end { Denboragailua }
 ******************************************************************************/
 
-extern int score;
+/*!
+ * \brief Joku modu mugatuan irabazteko iritsi behar den puntuazioa.
+ */
 #define MAX_SCORE 200
+
+/*!
+ * \brief Partidako puntuazioa gordetzen du.
+ */
+extern int score;
 
 #endif
