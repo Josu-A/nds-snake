@@ -79,69 +79,80 @@ bool touchedTouchScreen(touchPosition *touchPad)
 	return (touchPad->px != 0 || touchPad->py != 0);
 }
 
+/*!
+ * \brief Jokoaren logika zehazten du.
+ */
 void jokoa01()
 {	
-	// Hasierako egoera ezarri
-	AUTOMATON_STATE = AUTOMATON_START;
+	AUTOMATON_STATE = AUTOMATON_START; // Hasierako egoera ezarri
 	
 	setInterruptionServiceRutines(); // Eten zerbitzu-errutinak ezarri
 	configureKeys(KEY_SELECT | KEY_START); // SELECT eta START teklak etenen bidez sinkronizatu
-	// Timer0 denboragailua konfiguratzen da zehaztutako eten segundurako
-	int latch = (1<<16) - (1<<25) / (ETEN_SEGUNDOKO * (1<<10));
-	configureTimer0(latch, 0x1<<6 | 0x3<<0);
+	int latch = (1<<16) - (1<<25) / (ETEN_SEGUNDOKO * (1<<10)); // Latch-a lortu
+	configureTimer0(latch, 0x1<<6 | 0x3<<0); // 0 denoragailua konfiguratu
 	allowInterruptsKeys(); // Teklatuaren etenak baimendu
-	allowInterruptsTimer0(); // 0 denboragailuaren etenak baimendu eta martxan jarri
-	startClockTimer0();
+	allowInterruptsTimer0(); // 0 denboragailuaren etenak baimendu
+	startClockTimer0(); // 0 denboragailua martxan jarri
 
-	// Touch botoiak sortu
-	createButtons();
-	saveIntoMemorySnake();
+	createButtons(); // Pantailaratzeko botoiak sortu
+	saveIntoMemorySnake(); // Memorira gorde sugea
 	
+	// Loop nagusia
 	while(1)
 	{
+		// Jokua ireki deneko egoera
 		if (AUTOMATON_STATE == AUTOMATON_START)
 		{
 			// Nothing for now
 		}
-		else if (AUTOMATON_STATE == AUTOMATON_SELECTION)
+		// Jolas mota aukeratzen denerako egoera
+		else if (AUTOMATON_STATE == AUTOMATON_SELECTION) 
 		{
-			resetGameConfig();
+			resetGameConfig(); // Jokoa ondo hasieratzeko aldagaiak hasieratu
 
+			// Azpiko pantailan bi jolas moduen botoiak erakutsi
 			showButton(&buttonSelectModeLimited, &bottomScreenConsole);
 			showButton(&buttonSelectModeUnlimited, &bottomScreenConsole);
 
+			// Joku mota aukeratzeko begizta
 			while (selectedGameMode == GAMEMODE_NONE)
 			{
 				touchRead(&PANT_DAT);
 				if (touchedInsideButton(&buttonSelectModeLimited, &PANT_DAT))
 				{
-					selectedGameMode = GAMEMODE_LIMITED; // Configure game for Limited mode
+					selectedGameMode = GAMEMODE_LIMITED;
 				}
 				else if (touchedInsideButton(&buttonSelectModeUnlimited, &PANT_DAT))
 				{
-					selectedGameMode = GAMEMODE_UNLIMITED; // Configure game for Unlimited mode
+					selectedGameMode = GAMEMODE_UNLIMITED;
 				}
 			}
 
+			// Azpiko pantailako jolas moduen botoiak ezkutatu
 			hideButton(&buttonSelectModeLimited, &bottomScreenConsole);
 			hideButton(&buttonSelectModeUnlimited, &bottomScreenConsole);
-
+			
+			// Goiko pantailan geratzen den denbora testua ezarri
 			showButton(&buttonGameTime, &topScreenConsole);
-			AUTOMATON_STATE = AUTOMATON_PLAYING; // Change automaton state to playing
+			
+			AUTOMATON_STATE = AUTOMATON_PLAYING; // Egoera jolasten ezarri
 		}
-		else if (AUTOMATON_STATE == AUTOMATON_PLAYING)
+		else if (AUTOMATON_STATE == AUTOMATON_PLAYING) // Jolasean ibiltzeko egoera
 		{
-			scanKeys();
-			rotateSnake(&snake);
-			animateSnake(&snake);
-			displaySnake(&snake);
+			scanKeys(); // Teklatuaren egoera eguneratzen du libnds-ko funtzioak erabiltzeko
+			updateRotationStateSnake(&snake); // Teklatutik norabide berria lortzen du
+			animateSnake(&snake); // Sugeak izan behar duen frame berria lortzen du
+								  // eta spritea gordetzen den memoriako lekuan frame
+								  // berriaren helbidea ezartzen da.
+			displaySnake(&snake); // Sugearen sprite eguneratua pantailatzen da
 
+			// Bukatzen den modua aukeratuz gero eta puntuazio maximora iristerakoan, jokoa amaitu.
 			if (selectedGameMode == GAMEMODE_LIMITED && score == MAX_SCORE)
 			{
 				AUTOMATON_STATE = AUTOMATON_ENDING;
 			}
 		}
-		else if (AUTOMATON_STATE == AUTOMATON_PAUSED)
+		else if (AUTOMATON_STATE == AUTOMATON_PAUSED) // Jolasa pausatzerako egoera
 		{
 			touchRead(&PANT_DAT);
 			if (touchedTouchScreen(&PANT_DAT) && ~(keysCurrent() & KEY_LID))
@@ -150,19 +161,20 @@ void jokoa01()
 				AUTOMATON_STATE = AUTOMATON_PLAYING;
 			}
 		}
-		else if (AUTOMATON_STATE == AUTOMATON_ENDING)
+		else if (AUTOMATON_STATE == AUTOMATON_ENDING) // Jolasa bukatzerakoak aukera egiteko egoera
 		{
 			// Nothing for now
 		}
 
-		swiWaitForVBlank();
+		swiWaitForVBlank(); // Pantailak guztiz errefrekatu arte itxaroten du
 
+		// Bi pantailen OAMak eguneratzen ditu momentuan memorian gordetako spritekin
 		oamUpdate(&oamMain);
  		oamUpdate(&oamSub);
 	}
 
-	// Teklatuaren etenak galarazi
-	denyInterruptsKeys();
-	// 0 denboragailuaren etenak galarazi
-	denyInterruptsTimer0();
+	/* Loop nagusia bukatzean egin beharko litzateken eragiketak, gure kasuan
+	   loop hori inoiz ez denez amaituko, ez dira beharrezkoak. */
+	denyInterruptsKeys(); // Teklatuko etenak galarazten ditu.
+	denyInterruptsTimer0(); // 0 denboragailuaren etenak galarazten ditu.
 }

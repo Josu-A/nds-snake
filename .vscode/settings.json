@@ -16,6 +16,7 @@
         "mutex": "c",
         "sstream": "c",
         "stop_token": "c",
-        "streambuf": "c"
+        "streambuf": "c",
+        "peripherals.h": "c"
     }
 }

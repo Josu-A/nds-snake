@@ -1,14 +1,15 @@
 #include <nds.h>
 #include <stdio.h>
 
+#include "serviceRutines.h"
 #include "definitions.h"
-#include "peripherals.h"
-#include "backgrounds.h"
-#include "sprites.h"
-#include "graphics.h"
 #include "gui.h"
 #include "objectSnake.h"
+#include "sprites.h"
 
+/*!
+ * \brief Etenen bidez konfiguratutako teklatuek jautiko duten funtzio nagusia.
+ */
 void interruptKeys()
 {
 	if (AUTOMATON_STATE == AUTOMATON_START)
@@ -40,6 +41,9 @@ void interruptKeys()
 	}
 }
 
+/*!
+ * \brief 0 denboragailuak etenak sortutakoan deituko duen funtzioa.
+ */
 void interruptTimer0()
 {
 	if (AUTOMATON_STATE == AUTOMATON_START)
@@ -48,7 +52,7 @@ void interruptTimer0()
 	}
 	else if (AUTOMATON_STATE == AUTOMATON_PLAYING)
 	{
-		static int speedCounter;
+		static int speedCounter = 0;
 		speedCounter++;
 		if (speedCounter >= ANIMATION_SPEED)
 		{
@@ -80,6 +84,10 @@ void interruptTimer0()
 	}
 }
 
+/*!
+ * \brief Eten zerbitzu-errutinak zehazten ditu teklatuarentzako eta
+ * denboragailuarentzako.
+ */
 void setInterruptionServiceRutines()
 {
 	irqSet(IRQ_KEYS, interruptKeys);

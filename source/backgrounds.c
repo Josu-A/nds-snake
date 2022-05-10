@@ -27,6 +27,11 @@ void erakutsiAteaIrekita() {
                      AteaIrekitaBitmapLen); /* Luzera (bytetan) automatikoki sortzen den aldagaia */
 }
 
+/*!
+ * \brief Goiko pantailan jokoaren banner nagusia kopiatzen du bigarren pantailako
+ * 3 fondoaren helbidera, eta 8 bmp-eko irudiaren kolore paleta ezartzen du bigarren
+ * pantailan.
+ */
 void showTitleTopScreen()
 {
     dmaCopyHalfWords(DMA_CHANNEL,

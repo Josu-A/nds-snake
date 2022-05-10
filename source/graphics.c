@@ -8,11 +8,22 @@
 #include "backgrounds.h"
 #include "sprites.h"
 
-/**
- * Aldagai globalak deklaratzen dira.
+/*!
+ * \brief Goiko pantailako (bigarren pantaila) kontsola kontrolatzeko datuak
+ * gordetzen ditu.
  */
 PrintConsole topScreenConsole;
+
+/*!
+ * \brief Beheko pantailako (bigarren pantaila) kontsola kontrolatzeko datuak
+ * gordetzen ditu.
+ */
 PrintConsole bottomScreenConsole;
+
+/*!
+ * \brief Bigarren pantailako 3 fondoaren NDS-arentzako indizea gordetzen du.
+ * 0etik 7ra.
+ */
 int bg3Sub;
 
 /**
@@ -33,7 +44,7 @@ int bg3Sub;
  * Extended fondoa; eta hirugarren geruzan, Extended fondoa. Horrez gain, hirugarren
  * fondoa aktibatzen da.
  */
-void initVideo() {
+static void initVideo() {
     vramSetPrimaryBanks(VRAM_A_MAIN_BG_0x06020000,
                         VRAM_B_MAIN_BG_0x06040000,
                         VRAM_C_SUB_BG_0x06200000,
@@ -81,7 +92,7 @@ void initVideo() {
  * - Memoriako helbidea ezarri.
  * - Geruzaren lehentasunari balio baxuena ezarri.
  */
-void initBackgrounds() {
+static void initBackgrounds() {
     /**
      * Pantaila nagusiko 3 fondoaren afinitatea ezarri 16 biteko koloretarako.
      */
@@ -164,4 +175,6 @@ void hasieratuGrafikoakSpriteak()
 
     consoleInit(&topScreenConsole, 2, BgType_Text4bpp, BgSize_T_256x256, 2, 0, false, true);
     consoleInit(&bottomScreenConsole, 1, BgType_Text4bpp, BgSize_T_256x256, 2, 0, true, true);
+    REG_BG1CNT &= ~(3<<0); // lehentasuna garbitu pantaila nagusiko kontsolari
+    REG_BG1CNT |= BG_PRIORITY(BG_PRIORITY_0); // lehentasun handiena ezarri pantaila nagusiko kontsolari
 }
