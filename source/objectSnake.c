@@ -80,7 +80,11 @@ void moveSnake(Snake *snake)
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
 		else
+		{
 			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			isSnakeDead = SNAKE_DEAD;
+		}
+			
 	}
 	else if (snake->snakeHead.state == W_HEAD_LEFT && snake->snakeHead.x >= 0)
 	{
@@ -95,7 +99,10 @@ void moveSnake(Snake *snake)
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
 		else
+		{
 			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			isSnakeDead = SNAKE_DEAD;
+		}
 	}
 	else if (snake->snakeHead.state == W_HEAD_DOWN && snake->snakeHead.y <= SCREEN_HEIGHT - SNAKE_DIMENSION)
 	{
@@ -111,7 +118,10 @@ void moveSnake(Snake *snake)
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
 		else
+		{
 			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			isSnakeDead = SNAKE_DEAD;
+		}
 	}
 	else if (snake->snakeHead.state == W_HEAD_UP && snake->snakeHead.y >= 0)
 	{
@@ -127,7 +137,10 @@ void moveSnake(Snake *snake)
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
 		else
+		{
 			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			isSnakeDead = SNAKE_DEAD;
+		}
 	}
 }
 

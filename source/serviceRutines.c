@@ -63,10 +63,11 @@ void interruptTimer0()
 
 		timeLeftToPlay--;
 		showRealTimeTimer(timeLeftToPlay, &timeLeftToPlayNormalized, &topScreenConsole, 29, 22);
-		if (timeLeftToPlay == 0)
+		if (timeLeftToPlay == 0 || isSnakeDead == SNAKE_DEAD)
 		{
 			hideButton(&buttonGameTime, &topScreenConsole);
 			hideSnake(&snake);
+			isSnakeDead = SNAKE_DEAD;
 			AUTOMATON_STATE = AUTOMATON_ENDING;
 		}
 	}
