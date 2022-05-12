@@ -66,6 +66,7 @@ void resetGameConfig()
 													 // each game finishes to its max value, in seconds
 	timeLeftToPlay = MAX_GAME_TIME; // Reset the time left to play to its max value, in interruptions
 	timeLeftToPlayNormalized = MAX_GAME_TIME_NORMALIZED; // Reset the time left to play to its max value, in seconds
+	isSnakeDead = SNAKE_ALIVE;
 	setPositionSnake(&snake, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	setDefaultRotationSnake(&snake);
 }

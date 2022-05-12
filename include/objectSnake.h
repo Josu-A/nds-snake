@@ -9,7 +9,7 @@
 /*!
  * \brief Sugearen mugimendua azkartzen edo moteltzen du. 1 azkarrena, IntSize motelena.
  */
-#define ANIMATION_SPEED 1
+#define ANIMATION_SPEED 2
 
 /*!
  * \brief Suge buruaren spritearen irudiak egoera bakoitzeko zenbat sub-sprite
@@ -155,6 +155,20 @@ typedef enum SNAKE_ROTATE_PERMISSION {
  * norabidea aldatzeko.
  */
 extern SNAKE_ROTATE_PERMISSION canSnakeRotate;
+
+/*!
+ * \brief Sugeak bizirik edo hilda izateko balio posibleak zehazten ditu.
+ */
+typedef enum SNAKE_DEATH_STATE {
+    SNAKE_ALIVE,
+    SNAKE_DEAD
+} SNAKE_DEATH_STATE;
+
+/*!
+ * \brief Sugea bizirik dagoen adiJokuak jokalariari aukera eman edo kendu egiten dio sugearen
+ * norabidea aldatzeko.
+ */
+extern SNAKE_DEATH_STATE isSnakeDead;
 
 /*!
  * \brief Sugearen erakuslea jaso eta mugitu egingo du norabide egokian baldin

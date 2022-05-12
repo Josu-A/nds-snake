@@ -17,6 +17,13 @@ Snake snake;
 SNAKE_ROTATE_PERMISSION canSnakeRotate = SNAKE_CAN_ROTATE;
 
 /*!
+ * \brief Sugea bizirik dagoen adiJokuak jokalariari aukera eman edo kendu egiten dio sugearen
+ * norabidea aldatzeko.
+ */
+SNAKE_DEATH_STATE isSnakeDead = SNAKE_ALIVE;
+
+
+/*!
  * \brief Sugearen erakuslea jasota honen posizioa ezartzen da pantailan
  * emandako x eta y balioekin.
  * 
@@ -134,35 +141,33 @@ void updateRotationStateSnake(Snake* snake)
 {
 	if (canSnakeRotate == SNAKE_CAN_ROTATE)
 	{
+		// Burua
 		int keys = keysDown();
 		if (keys)
 		{
 			if (keys & KEY_RIGHT && snake->snakeHead.state != W_HEAD_LEFT)
 			{
 				snake->snakeHead.state = W_HEAD_RIGHT;
-				snake->snakeTail.state = W_TAIL_RIGHT;
 				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 			}	
 			else if (keys & KEY_LEFT && snake->snakeHead.state != W_HEAD_RIGHT)
 			{
 				snake->snakeHead.state = W_HEAD_LEFT;
-				snake->snakeTail.state = W_TAIL_LEFT;
 				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 			}
 			else if (keys & KEY_DOWN && snake->snakeHead.state != W_HEAD_UP)
 			{
 				snake->snakeHead.state = W_HEAD_DOWN;
-				snake->snakeTail.state = W_TAIL_DOWN;
 				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 			}
 			else if (keys & KEY_UP && snake->snakeHead.state != W_HEAD_DOWN)
 			{
 				snake->snakeHead.state = W_HEAD_UP;
-				snake->snakeTail.state = W_TAIL_UP;
 				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 			}
 		}
-
+		
+		// Gorputza
 		if (snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.y != snake->snakeBody[0].y)
 		{
 			snake->snakeBody[0].state = W_BODY_VERTICAL;
@@ -172,6 +177,7 @@ void updateRotationStateSnake(Snake* snake)
 			snake->snakeBody[0].state = W_BODY_HORIZONTAL;
 		}
 		
+		// Isatsa
 		if (snake->snakeTail.state == W_TAIL_RIGHT || snake->snakeTail.state == W_TAIL_LEFT)
 		{
 			if (snake->snakeBody[0].y > snake->snakeTail.y)
@@ -183,7 +189,7 @@ void updateRotationStateSnake(Snake* snake)
 				snake->snakeTail.state = W_TAIL_UP;
 			}
 		}
-		if (snake->snakeTail.state == W_TAIL_UP || snake->snakeTail.state == W_TAIL_DOWN)
+		else if (snake->snakeTail.state == W_TAIL_UP || snake->snakeTail.state == W_TAIL_DOWN)
 		{
 			if (snake->snakeBody[0].x > snake->snakeTail.x)
 			{
