@@ -4,41 +4,137 @@
 /*!
  * \brief Suge spritearen luzera/altuera
  */
-#define SNAKE_DIMENSION 32
+#define SNAKE_DIMENSION 16
 
 /*!
  * \brief Sugearen mugimendua azkartzen edo moteltzen du. 1 azkarrena, IntSize motelena.
  */
-#define ANIMATION_SPEED 3
+#define ANIMATION_SPEED 1
 
 /*!
- * \brief Sugearen spritearen irudiak egoera bakoitzeko zenbat sub-sprite horizontal dituen.
+ * \brief Suge buruaren spritearen irudiak egoera bakoitzeko zenbat sub-sprite
+ * horizontal dituen.
  */
-#define FRAMES_PER_ANIMATION 3
+#define HEAD_FRAMES_PER_ANIMATION 4
 
 /*!
- * \brief Suge objektuak izan ditzakeen egoerak definitzen dira
+ * \brief Suge buru objektuak izan ditzakeen egoerak definitzen dira
  */
-typedef enum SnakeSpriteState {
-    W_UP, // Sugea gorantz doa
-    W_RIGHT, // Sugea eskuinerantz doa
-    W_DOWN, // Sugea beherantz doa
-    W_LEFT // Sugea ezkerrerantz doa
-} SnakeSpriteState;
+typedef enum SpriteSnakeHeadState {
+    W_HEAD_UP, // Suge burua gorantz doa
+    W_HEAD_RIGHT, // Suge burua eskuinerantz doa
+    W_HEAD_DOWN, // Suge burua beherantz doa
+    W_HEAD_LEFT // Suge burua ezkerrerantz doa
+} SpriteSnakeHeadState;
 
 /*!
- * \brief Sugea objektu bat definitzen du.
+ * \brief Suge buru objektu bat definitzen du.
  */
-typedef struct Snake
+typedef struct SnakeHead
 {
     int x; // Objektuaren x posizioa gordetzen du
     int y; // Objektuaren y posizioa gordetzen du
 
-    u16* spriteGfxMem; // Sprite-a gordeko den memoriaren helbidea gordetzen du
-    u8* frameGfx; // Sprite-ak dituen tile kopurua gordetzen du. Tile bat = 4 pixel dira.
+    u16 *spriteGfxMem; // Sprite-a gordeko den memoriaren helbidea gordetzen du
+    u8 *frameGfx; // Sprite-ak dituen tile kopurua gordetzen du. Tile bat = 4 pixel dira.
 
-    SnakeSpriteState state; // Objektuaren egoera gordetzen du
+    SpriteSnakeHeadState state; // Objektuaren egoera gordetzen du
     int animFrame; // Objektuaren egoeraren zenbatgarren fotograman dagoen adierazten du
+
+    int spriteId; // OAMen izango duen identifikatzailea
+} SnakeHead;
+
+/*!
+ * \brief Sugeak izan ditzakeen gorputz zati maximoa
+ */
+#define MAX_SNAKE_BODY_PARTS 50
+
+/*!
+ * \brief Sugeak hasieran dituen gorputz kopurua
+ */
+#define MIN_SNAKE_BODY_PARTS 1
+
+/*!
+ * \brief Suge gorputzaren spritearen irudiak egoera bakoitzeko zenbat sub-sprite
+ * horizontal dituen.
+ */
+#define BODY_FRAMES_PER_ANIMATION 2
+
+/*!
+ * \brief Suge gorputz objektuak izan ditzakeen egoerak definitzen dira
+ */
+typedef enum SpriteSnakeBodyState {
+    W_BODY_VERTICAL, // Suge gorputza bertikalean mugitzen ari da
+    W_BODY_HORIZONTAL, // Suge gorputza horizontalean mugitzen ari da
+    W_BODY_NE, // Suge gorputza biratzen ari da goitik eta eskuinetik
+    W_BODY_ES, // Suge gorputza biratzen ari da eskuinetik eta behetik
+    W_BODY_SW, // Suge gorputza biratzen ari da behetik eta ezkerretik
+    W_BODY_WN // Suge gorputza biratzen ari da ezkerretik eta goitik
+} SpriteSnakeBodyState;
+
+/*!
+ * \brief Suge gorputz objektu bat definitzen du.
+ */
+typedef struct SnakeBody
+{
+    int x; // Objektuaren x posizioa gordetzen du
+    int y; // Objektuaren y posizioa gordetzen du
+
+    u16 *spriteGfxMem; // Spritea gordeko den memoriaren helbidea gordetzen du
+    u8 *frameGfx; // Spriteak dituen tile kopurua gordetzen du. Tile bat = 4 pixel dira.
+
+    SpriteSnakeBodyState state; // Objektuaren egoera gordetzen du
+    int animFrame; // Objektuaren egoeraren zenbatgarren fotograman dagoen adierazten du
+
+    int spriteId; // OAMen izango duen identifikatzailea
+} SnakeBody;
+
+/*!
+ * \brief Suge isatsaren spritearen irudiak egoera bakoitzeko zenbat sub-sprite
+ * horizontal dituen.
+ */
+#define TAIL_FRAMES_PER_ANIMATION 2
+
+/*!
+ * \brief Suge isats objektuak izan ditzakeen egoerak definitzen dira
+ */
+typedef enum SpriteSnakeTailState {
+    W_TAIL_UP, // Suge isatsa gorantz doa
+    W_TAIL_RIGHT, // Suge isatsa eskuinerantz doa
+    W_TAIL_DOWN, // Suge isatsa beherantz doa
+    W_TAIL_LEFT, // Suge isatsa ezkerrerantz doa
+    W_TAIL_NE, // Suge isatsa biratzen ari da goitik eta eskuinetik
+    W_TAIL_ES, // Suge isatsa biratzen ari da eskuinetik eta behetik
+    W_TAIL_SW, // Suge isatsa biratzen ari da behetik eta ezkerretik
+    W_TAIL_WN // Suge isatsa biratzen ari da ezkerretik eta goitik
+} SpriteSnakeTailState;
+
+/*!
+ * \brief Suge gorputz objektu bat definitzen du.
+ */
+typedef struct SnakeTail
+{
+    int x; // Objektuaren x posizioa gordetzen du
+    int y; // Objektuaren y posizioa gordetzen du
+
+    u16 *spriteGfxMem; // Spritea gordeko den memoriaren helbidea gordetzen du
+    u8 *frameGfx; // Spriteak dituen tile kopurua gordetzen du. Tile bat = 4 pixel dira.
+
+    SpriteSnakeTailState state; // Objektuaren egoera gordetzen du
+    int animFrame; // Objektuaren egoeraren zenbatgarren fotograman dagoen adierazten du
+
+    int spriteId; // OAMen izango duen identifikatzailea
+} SnakeTail;
+
+/*!
+ * \brief Suge oso bat definitzen da.
+ */
+typedef struct Snake
+{
+    SnakeHead snakeHead; // Sugearen burua
+    int numSnakeBody; // Zenbat gorputz zati dituen orain
+    SnakeBody snakeBody[MAX_SNAKE_BODY_PARTS]; // Sugearen gorputzak
+    SnakeTail snakeTail; // Sugearen isatsa
 } Snake;
 
 /*!
@@ -66,7 +162,7 @@ extern SNAKE_ROTATE_PERMISSION canSnakeRotate;
  * sugeak eremutik aterako balitz, erabiltzaileari kontrola kentzen dio eta 
  * mugitzen gelditzen da.
  * 
- * \param snake suge objektuaren erakuslea
+ * \param snake suge buru objektuaren erakuslea
  */
 extern void moveSnake(Snake *snake);
 
@@ -103,6 +199,6 @@ extern void setPositionSnake(Snake *snake, int x, int y);
  * 
  * \param snake suge objektuaren erakuslea
  */
-extern void setDefaultRotationSnake(Snake *sprite);
+extern void setDefaultRotationSnake(Snake *snake);
 
 #endif

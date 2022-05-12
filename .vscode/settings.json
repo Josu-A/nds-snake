@@ -17,6 +17,7 @@
         "sstream": "c",
         "stop_token": "c",
         "streambuf": "c",
-        "peripherals.h": "c"
+        "peripherals.h": "c",
+        "spritesnakehead.h": "c"
     }
 }

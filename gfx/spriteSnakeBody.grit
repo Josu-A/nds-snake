@@ -1,0 +1,17 @@
+# Exclude map data
+-m!
+
+# Set the warning/log level to 3
+-W3
+
+# Bit depth to 4 (16 color pallete)
+-gB4
+
+# Metatile height to 2
+-Mh2
+
+# Metatile width to 2
+-Mw2
+
+#include pal
+-p

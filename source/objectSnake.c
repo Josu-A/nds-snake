@@ -26,8 +26,14 @@ SNAKE_ROTATE_PERMISSION canSnakeRotate = SNAKE_CAN_ROTATE;
  */
 void setPositionSnake(Snake *snake, int x, int y)
 {
-	snake->x = x;
-	snake->y = y;
+	snake->snakeHead.x = x;
+	snake->snakeHead.y = y;
+
+	snake->snakeBody[0].x = snake->snakeHead.x - SNAKE_DIMENSION;
+	snake->snakeBody[0].y = snake->snakeHead.y;
+
+	snake->snakeTail.x = snake->snakeBody[0].x - SNAKE_DIMENSION;
+	snake->snakeTail.y = snake->snakeBody[0].y;
 }
 
 /*!
@@ -36,9 +42,11 @@ void setPositionSnake(Snake *snake, int x, int y)
  * 
  * \param snake suge objektuaren erakuslea
  */
-void setDefaultRotationSnake(Snake *sprite)
+void setDefaultRotationSnake(Snake *snake)
 {
-	sprite->state = W_RIGHT;
+	snake->snakeHead.state = W_HEAD_RIGHT;
+	snake->snakeBody[0].state = W_BODY_HORIZONTAL;
+	snake->snakeTail.state = W_TAIL_RIGHT;
 }
 
 /*!
@@ -51,40 +59,64 @@ void setDefaultRotationSnake(Snake *sprite)
  */
 void moveSnake(Snake *snake)
 {
-	if (snake->state == W_RIGHT && snake->x <= SCREEN_WIDTH - SNAKE_DIMENSION)
+	if (snake->snakeHead.state == W_HEAD_RIGHT && snake->snakeHead.x <= SCREEN_WIDTH - SNAKE_DIMENSION)
 	{
-		if (snake->x < SCREEN_WIDTH - SNAKE_DIMENSION)
+		if (snake->snakeHead.x < SCREEN_WIDTH - SNAKE_DIMENSION)
 		{
-			snake->x += SNAKE_DIMENSION;
+			snake->snakeTail.x = snake->snakeBody[0].x;
+			snake->snakeBody[0].x = snake->snakeHead.x;
+
+			snake->snakeTail.y = snake->snakeBody[0].y;
+			snake->snakeBody[0].y = snake->snakeHead.y;
+
+			snake->snakeHead.x += SNAKE_DIMENSION;
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
 		else
 			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 	}
-	else if (snake->state == W_LEFT && snake->x >= 0)
+	else if (snake->snakeHead.state == W_HEAD_LEFT && snake->snakeHead.x >= 0)
 	{
-		if (snake->x > 0) {
-			snake->x -= SNAKE_DIMENSION;
+		if (snake->snakeHead.x > 0) {
+			snake->snakeTail.x = snake->snakeBody[0].x;
+			snake->snakeBody[0].x = snake->snakeHead.x;
+
+			snake->snakeTail.y = snake->snakeBody[0].y;
+			snake->snakeBody[0].y = snake->snakeHead.y;
+
+			snake->snakeHead.x -= SNAKE_DIMENSION;
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
 		else
 			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 	}
-	else if (snake->state == W_DOWN && snake->y <= SCREEN_HEIGHT - SNAKE_DIMENSION)
+	else if (snake->snakeHead.state == W_HEAD_DOWN && snake->snakeHead.y <= SCREEN_HEIGHT - SNAKE_DIMENSION)
 	{
-		if (snake->y < SCREEN_HEIGHT - SNAKE_DIMENSION)
+		if (snake->snakeHead.y < SCREEN_HEIGHT - SNAKE_DIMENSION)
 		{
-			snake->y += SNAKE_DIMENSION;
+			snake->snakeTail.x = snake->snakeBody[0].x;
+			snake->snakeBody[0].x = snake->snakeHead.x;
+
+			snake->snakeTail.y = snake->snakeBody[0].y;
+			snake->snakeBody[0].y = snake->snakeHead.y;
+
+			snake->snakeHead.y += SNAKE_DIMENSION;
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
 		else
 			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 	}
-	else if (snake->state == W_UP && snake->y >= 0)
+	else if (snake->snakeHead.state == W_HEAD_UP && snake->snakeHead.y >= 0)
 	{
-		if (snake->y > 0)
+		if (snake->snakeHead.y > 0)
 		{
-			snake->y -= SNAKE_DIMENSION;
+			snake->snakeTail.x = snake->snakeBody[0].x;
+			snake->snakeBody[0].x = snake->snakeHead.x;
+
+			snake->snakeTail.y = snake->snakeBody[0].y;
+			snake->snakeBody[0].y = snake->snakeHead.y;
+			
+			snake->snakeHead.y -= SNAKE_DIMENSION;
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
 		else
@@ -98,30 +130,69 @@ void moveSnake(Snake *snake)
  * 
  * \param snake suge objektuaren erakuslea
  */
-void updateRotationStateSnake(Snake* sprite)
+void updateRotationStateSnake(Snake* snake)
 {
-	int keys = keysDown();
-	if (keys && canSnakeRotate == SNAKE_CAN_ROTATE)
+	if (canSnakeRotate == SNAKE_CAN_ROTATE)
 	{
-		if (keys & KEY_RIGHT && sprite->state != W_LEFT)
+		int keys = keysDown();
+		if (keys)
 		{
-			sprite->state = W_RIGHT;
-			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
-		}	
-		else if (keys & KEY_LEFT && sprite->state != W_RIGHT)
-		{
-			sprite->state = W_LEFT;
-			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			if (keys & KEY_RIGHT && snake->snakeHead.state != W_HEAD_LEFT)
+			{
+				snake->snakeHead.state = W_HEAD_RIGHT;
+				snake->snakeTail.state = W_TAIL_RIGHT;
+				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			}	
+			else if (keys & KEY_LEFT && snake->snakeHead.state != W_HEAD_RIGHT)
+			{
+				snake->snakeHead.state = W_HEAD_LEFT;
+				snake->snakeTail.state = W_TAIL_LEFT;
+				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			}
+			else if (keys & KEY_DOWN && snake->snakeHead.state != W_HEAD_UP)
+			{
+				snake->snakeHead.state = W_HEAD_DOWN;
+				snake->snakeTail.state = W_TAIL_DOWN;
+				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			}
+			else if (keys & KEY_UP && snake->snakeHead.state != W_HEAD_DOWN)
+			{
+				snake->snakeHead.state = W_HEAD_UP;
+				snake->snakeTail.state = W_TAIL_UP;
+				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			}
 		}
-		else if (keys & KEY_DOWN && sprite->state != W_UP)
+
+		if (snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.y != snake->snakeBody[0].y)
 		{
-			sprite->state = W_DOWN;
-			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			snake->snakeBody[0].state = W_BODY_VERTICAL;
 		}
-		else if (keys & KEY_UP && sprite->state != W_DOWN)
+		else if (snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x != snake->snakeBody[0].x)
 		{
-			sprite->state = W_UP;
-			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			snake->snakeBody[0].state = W_BODY_HORIZONTAL;
+		}
+		
+		if (snake->snakeTail.state == W_TAIL_RIGHT || snake->snakeTail.state == W_TAIL_LEFT)
+		{
+			if (snake->snakeBody[0].y > snake->snakeTail.y)
+			{
+				snake->snakeTail.state = W_TAIL_DOWN;
+			}
+			else if (snake->snakeBody[0].y < snake->snakeTail.y)
+			{
+				snake->snakeTail.state = W_TAIL_UP;
+			}
+		}
+		if (snake->snakeTail.state == W_TAIL_UP || snake->snakeTail.state == W_TAIL_DOWN)
+		{
+			if (snake->snakeBody[0].x > snake->snakeTail.x)
+			{
+				snake->snakeTail.state = W_TAIL_RIGHT;
+			}
+			else if (snake->snakeBody[0].x < snake->snakeTail.x)
+			{
+				snake->snakeTail.state = W_TAIL_LEFT;
+			}
 		}
 	}
 }
@@ -135,7 +206,13 @@ void updateRotationStateSnake(Snake* sprite)
  */
 void changeAnimationFrameSnake(Snake *snake)
 {
-	snake->animFrame++;
-	if(snake->animFrame >= FRAMES_PER_ANIMATION)
-		snake->animFrame = 0;
+	snake->snakeHead.animFrame++;
+	if(snake->snakeHead.animFrame >= HEAD_FRAMES_PER_ANIMATION)
+		snake->snakeHead.animFrame = 0;
+	snake->snakeBody[0].animFrame++;
+	if (snake->snakeBody[0].animFrame >= BODY_FRAMES_PER_ANIMATION)
+		snake->snakeBody[0].animFrame = 0;
+	snake->snakeTail.animFrame++;
+	if(snake->snakeTail.animFrame >= TAIL_FRAMES_PER_ANIMATION)
+		snake->snakeTail.animFrame = 0;
 }

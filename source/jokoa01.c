@@ -95,18 +95,15 @@ void jokoa01()
 	startClockTimer0(); // 0 denboragailua martxan jarri
 
 	createButtons(); // Pantailaratzeko botoiak sortu
-	saveIntoMemorySnake(); // Memorira gorde sugea
-	
+	saveIntoMemorySnakeHead(&snake); // Memorira gorde sugea
+	saveIntoMemorySnakeBody(&snake);
+	saveIntoMemorySnakeTail(&snake);
+
 	// Loop nagusia
 	while(1)
 	{
-		// Jokua ireki deneko egoera
-		if (AUTOMATON_STATE == AUTOMATON_START)
-		{
-			// Nothing for now
-		}
 		// Jolas mota aukeratzen denerako egoera
-		else if (AUTOMATON_STATE == AUTOMATON_SELECTION) 
+		if (AUTOMATON_STATE == AUTOMATON_SELECTION) 
 		{
 			resetGameConfig(); // Jokoa ondo hasieratzeko aldagaiak hasieratu
 
@@ -141,9 +138,11 @@ void jokoa01()
 		{
 			scanKeys(); // Teklatuaren egoera eguneratzen du libnds-ko funtzioak erabiltzeko
 			updateRotationStateSnake(&snake); // Teklatutik norabide berria lortzen du
-			animateSnake(&snake); // Sugeak izan behar duen frame berria lortzen du
-								  // eta spritea gordetzen den memoriako lekuan frame
-								  // berriaren helbidea ezartzen da.
+			animateSnakeHead(&snake); // Sugeak izan behar duen frame berria lortzen du
+								      // eta spritea gordetzen den memoriako lekuan frame
+								      // berriaren helbidea ezartzen da.
+			animateSnakeBody(&snake);
+			animateSnakeTail(&snake);
 			displaySnake(&snake); // Sugearen sprite eguneratua pantailatzen da
 
 			// Bukatzen den modua aukeratuz gero eta puntuazio maximora iristerakoan, jokoa amaitu.

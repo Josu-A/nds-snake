@@ -15,7 +15,7 @@
 PrintConsole topScreenConsole;
 
 /*!
- * \brief Beheko pantailako (bigarren pantaila) kontsola kontrolatzeko datuak
+ * \brief Beheko pantailako (pantaila nagusia) kontsola kontrolatzeko datuak
  * gordetzen ditu.
  */
 PrintConsole bottomScreenConsole;
@@ -143,7 +143,7 @@ static void initBackgrounds() {
      *  Bigarren mailako pantailako 3 fondoaren afinitatea ezarri 8 biteko koloretarako. 
      */
     bg3Sub = bgInitSub(3, BgType_Bmp8, BgSize_B8_256x256, 1, 0);
-    REG_BG3CNT_SUB |= BG_PRIORITY(BG_PRIORITY_3); // Lehentasun baxua
+    bgSetPriority(bg3Sub, BG_PRIORITY(BG_PRIORITY_3));
 }
 
 /**
@@ -175,6 +175,5 @@ void hasieratuGrafikoakSpriteak()
 
     consoleInit(&topScreenConsole, 2, BgType_Text4bpp, BgSize_T_256x256, 2, 0, false, true);
     consoleInit(&bottomScreenConsole, 1, BgType_Text4bpp, BgSize_T_256x256, 2, 0, true, true);
-    REG_BG1CNT &= ~(3<<0); // lehentasuna garbitu pantaila nagusiko kontsolari
-    REG_BG1CNT |= BG_PRIORITY(BG_PRIORITY_0); // lehentasun handiena ezarri pantaila nagusiko kontsolari
+    bgSetPriority(1, BG_PRIORITY(BG_PRIORITY_0));
 }
