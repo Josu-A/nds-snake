@@ -131,6 +131,8 @@ void jokoa01()
 			// Azpiko pantailako jolas moduen botoiak ezkutatu
 			hideButton(&buttonSelectModeLimited, &bottomScreenConsole);
 			hideButton(&buttonSelectModeUnlimited, &bottomScreenConsole);
+
+			showMainBgGameplay(); // /////////////////////////////////////////
 			
 			// Goiko pantailan geratzen den denbora testua ezarri
 			showButton(&buttonGameTime, &topScreenConsole);
@@ -141,7 +143,7 @@ void jokoa01()
 		else if (AUTOMATON_STATE == AUTOMATON_PLAYING) // Jolasean ibiltzeko egoera
 		{
 			scanKeys(); // Teklatuaren egoera eguneratzen du libnds-ko funtzioak erabiltzeko
-			updateRotationStateSnake(&snake); // Teklatutik norabide berria lortzen du
+			updateRotationStateSnakeHead(&snake); // Teklatutik norabide berria lortzen du
 			animateSnake(&snake); // Eguneratutako sub-sprite berria memorian ezartzen du erakusteko
 
 			showRealTimeTimer(timeLeftToPlay, &timeLeftToPlayNormalized, &topScreenConsole, 29, 22);

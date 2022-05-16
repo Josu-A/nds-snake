@@ -9,7 +9,7 @@
 /*!
  * \brief Sugearen mugimendua azkartzen edo moteltzen du. 1 azkarrena, IntSize motelena.
  */
-#define ANIMATION_SPEED 1
+#define ANIMATION_SPEED 3
 
 /*!
  * \brief Suge buruaren spritearen irudiak egoera bakoitzeko zenbat sub-sprite
@@ -79,6 +79,9 @@ typedef struct SnakeBody
 {
     int x; // Objektuaren x posizioa gordetzen du
     int y; // Objektuaren y posizioa gordetzen du
+
+    int prevX; // Objektuaren pausu bat atzera izan duen x posizioa
+    int prevY; // Objektuaren pausu bat atzera izan duen y posizioa
 
     u16 *spriteGfxMem; // Spritea gordeko den memoriaren helbidea gordetzen du
     u8 *frameGfx; // Spriteak dituen tile kopurua gordetzen du. Tile bat = 4 pixel dira.
@@ -180,13 +183,15 @@ extern SNAKE_DEATH_STATE isSnakeDead;
  */
 extern void moveSnake(Snake *snake);
 
+extern void updateRotationStateSnakeBody(Snake *snake);
+
 /*!
  * \brief Sugearen erakuslea jaso eta honi egoera berria ezarriko dio teklatutik
  * jasotako norabidera, baldin eta soilik baldin aukera badu norabidez aldatzeko.
  * 
  * \param snake suge objektuaren erakuslea
  */
-extern void updateRotationStateSnake(Snake *snake);
+extern void updateRotationStateSnakeHead(Snake *snake);
 
 /*!
  * \brief Sugearen norabide berdineko erakutsi beharreko sub-spritearen

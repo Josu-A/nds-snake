@@ -67,6 +67,7 @@ void interruptTimer0()
 			changeAnimationFrameSnake(&snake);
 			moveSnake(&snake);
 			displaySnake(&snake); // Sugearen sprite eguneratua pantailatzen da
+			updateRotationStateSnakeBody(&snake);
 			speedCounter = 0;
 
 			// Sugeak sagarra jaten badu

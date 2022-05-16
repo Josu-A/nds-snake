@@ -10,6 +10,7 @@
 #include "titleTopScreen.h" // grit-ek sortzen du
 #include "bgGamemodeSelect.h" // grit-ek sortzen du
 #include "bgGamemodeSelectModes.h" // grit-ek sortzen du
+#include "bgGameplay.h" // grit-ek sortzen du
 
 /*!
  * \brief Goiko pantailan jokoaren banner nagusia kopiatzen du bigarren pantailako
@@ -62,4 +63,16 @@ void showMainBgGamemodeSelectModes()
                      bgGamemodeSelectModesBitmap, // Automatikoki sortzen den aldagaia
                      (uint16 *)BG_BMP_RAM(8), // Pantaila nagusiko 3 fondoaren helbidea
                      bgGamemodeSelectModesBitmapLen); // Luzera (bytetan) automatikoki sortzen den aldagaia
+}
+
+/*!
+ * \brief Beheko pantailan jokatzerakoan agertzen den fondoa kopiatzen du pantaila
+ * nagusiko 3 fondoaren helbidera, 16 bit kolore mota erabiliz.
+ */ 
+void showMainBgGameplay()
+{
+	dmaCopyHalfWords(DMA_CHANNEL, // Erabiltzeko DMA kanala
+                     bgGameplayBitmap, // Automatikoki sortzen den aldagaia
+                     (uint16 *)BG_BMP_RAM(8), // Pantaila nagusiko 3 fondoaren helbidea
+                     bgGameplayBitmapLen); // Luzera (bytetan) automatikoki sortzen den aldagaia
 }

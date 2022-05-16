@@ -145,70 +145,75 @@ void moveSnake(Snake *snake)
 	}
 }
 
-/*!
- * \brief Sugearen erakuslea jaso eta honi egoera berria ezarriko dio teklatutik
- * jasotako norabidera, baldin eta soilik baldin aukera badu norabidez aldatzeko.
- * 
- * \param snake suge objektuaren erakuslea
- */
-void updateRotationStateSnake(Snake* snake)
+void updateRotationStateSnakeBody(Snake *snake)
 {
 	// Sugeak biratzeko aukera badu
 	if (canSnakeRotate == SNAKE_CAN_ROTATE)
 	{
-		int keys = keysDown(); // Teklak detektatu
-
-		// If sententzia honek sugearen buruaren biraketa kontrolatuko du
-		if (keys) // Teklarik sakatu bada
-		{
-			/* Eskubi tekla sakatu bada eta sugea ezkerreratz ez badoa,
-			sugearen egoera eskubirantz ezarri eta biratzeko aukera kendu. */
-			if (keys & KEY_RIGHT && snake->snakeHead.state != W_HEAD_LEFT)
-			{
-				snake->snakeHead.state = W_HEAD_RIGHT;
-				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
-			}
-
-			/* Ezker tekla sakatu bada eta sugea eskubirantz ez badoa,
-			sugearen egoera ezkerrerantz ezarri eta biratzeko aukera kendu. */
-			else if (keys & KEY_LEFT && snake->snakeHead.state != W_HEAD_RIGHT)
-			{
-				snake->snakeHead.state = W_HEAD_LEFT;
-				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
-			}
-
-			/* Behera tekla sakatu bada eta sugea gorantz ez badoa,
-			sugearen egoera beherantz ezarri eta biratzeko aukera kendu. */
-			else if (keys & KEY_DOWN && snake->snakeHead.state != W_HEAD_UP)
-			{
-				snake->snakeHead.state = W_HEAD_DOWN;
-				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
-			}
-
-			/* Gora tekla sakatu bada eta sugea beherantz ez badoa,
-			sugearen egoera gorantz ezarri eta biratzeko aukera kendu. */
-			else if (keys & KEY_UP && snake->snakeHead.state != W_HEAD_DOWN)
-			{
-				snake->snakeHead.state = W_HEAD_UP;
-				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
-			}
-		}
-		
 		// if-elseif sententzia honek sugearen gorputzaren biraketa kontrolatuko du
-		/* Gorputza horizontalean mugitzen ari bada eta bere aurreko gorputz atala,
-		   burua kasu honetan, y ardatzeko posizio desberdinean badago, gorputzaren
-		   egoera bertikalera ezarri. */
-		if (snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.y != snake->snakeBody[0].y)
+		// Sprite horizontalera bira
+		if ((snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.y == snake->snakeBody[0].y) // Horizontalean doa
+			|| (snake->snakeBody[0].state == W_BODY_NE && snake->snakeHead.y == snake->snakeBody[0].y) // Goi-behetik eskuinera biratu eta eskuinera doa
+			|| (snake->snakeBody[0].state == W_BODY_ES && snake->snakeHead.y == snake->snakeBody[0].y) // Behe-gotik eskuinera biratu eta eskuinera doa
+		    || (snake->snakeBody[0].state == W_BODY_SW && snake->snakeHead.y == snake->snakeBody[0].y) // Behe-gotik ezkerrera biratu eta ezkerrera doa
+		   	|| (snake->snakeBody[0].state == W_BODY_WN && snake->snakeHead.y == snake->snakeBody[0].y) // Goi-behetik ezkerrera biratu eta ezkerrera doa
+		   )
+		{
+			snake->snakeBody[0].state = W_BODY_HORIZONTAL;
+		}
+		// Sprite bertikalera bira
+		else if ((snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x == snake->snakeBody[0].x) // Bertikalean doa
+				 || (snake->snakeBody[0].state == W_BODY_NE && snake->snakeHead.x == snake->snakeBody[0].x) // Eskubi-ezkerretik gora biratu eta gorantz doa
+				 || (snake->snakeBody[0].state == W_BODY_ES && snake->snakeHead.x == snake->snakeBody[0].x) // Eskubi-ezkerretik behera biratu eta beherantz doa
+				 || (snake->snakeBody[0].state == W_BODY_SW && snake->snakeHead.x == snake->snakeBody[0].x) // Ezker-eskubitik behera biratu eta beherantz doa
+				 || (snake->snakeBody[0].state == W_BODY_WN && snake->snakeHead.x == snake->snakeBody[0].x) // Ezker-eskubitil gora biratu eta gorantz doa
+				)
 		{
 			snake->snakeBody[0].state = W_BODY_VERTICAL;
 		}
-
-		/* Gorputza bertikalean mugitzen ari bada eta bere aurreko gorputz atala,
-		   burua kasu honetan, x ardatzeko posizio desberdinean badago, gorputzaren
-		   egoera horizontalera ezarri. */
-		else if (snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x != snake->snakeBody[0].x)
+		// Sprite ipar-ekira bira
+		else if ((snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.x < snake->snakeTail.x && snake->snakeHead.y < snake->snakeBody[0].y) // Horizontal ezkerretik gora biratu eta gorantz doa 
+				 || (snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x > snake->snakeBody[0].x && snake->snakeHead.y > snake->snakeTail.y) // Bertikal behetik eskubira biratu eta eskubirantz doa
+				 || (snake->snakeBody[0].state == W_BODY_ES && snake->snakeHead.x > snake->snakeBody[0].x && snake->snakeHead.y == snake->snakeBody[0].y) // Eskubi-ezkerretik behera biratu eta behera eskubira doa 
+				 || (snake->snakeBody[0].state == W_BODY_SW && snake->snakeHead.x == snake->snakeBody[0].x && snake->snakeHead.y < snake->snakeBody[0].y) // Ezker-eskubitik behera biratu eta behera eskubira doa
+				 || (snake->snakeBody[0].state == W_BODY_SW && snake->snakeHead.x > snake->snakeBody[0].x && snake->snakeHead.y == snake->snakeBody[0].y) // Behe-goitik ezkerrera biratu eta ezker gora doa
+				 || (snake->snakeBody[0].state == W_BODY_WN && snake->snakeHead.x == snake->snakeBody[0].x && snake->snakeHead.y < snake->snakeBody[0].y) // Goi-behetik ezkerrera biratu eta ezker gora doa
+				)
 		{
-			snake->snakeBody[0].state = W_BODY_HORIZONTAL;
+			snake->snakeBody[0].state = W_BODY_NE;
+		}
+		// Sprite eki-hegora bira
+		else if ((snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.x < snake->snakeTail.x && snake->snakeHead.y > snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x > snake->snakeBody[0].x && snake->snakeHead.y < snake->snakeTail.y) // 
+				 || (snake->snakeBody[0].state == W_BODY_NE && snake->snakeHead.x > snake->snakeBody[0].x && snake->snakeHead.y == snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_SW && snake->snakeHead.x == snake->snakeBody[0].x && snake->snakeHead.y > snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_WN && snake->snakeHead.x == snake->snakeBody[0].x && snake->snakeHead.y > snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_WN && snake->snakeHead.x > snake->snakeBody[0].x && snake->snakeHead.y == snake->snakeBody[0].y) // 
+				)
+		{
+			snake->snakeBody[0].state = W_BODY_ES;
+		}
+		// Sprite hego-mendera bira
+		else if ((snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.x > snake->snakeTail.x && snake->snakeHead.y > snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x < snake->snakeBody[0].x && snake->snakeHead.y < snake->snakeTail.y) // 
+				 || (snake->snakeBody[0].state == W_BODY_NE && snake->snakeHead.x == snake->snakeBody[0].x && snake->snakeHead.y > snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_NE && snake->snakeHead.x < snake->snakeBody[0].x && snake->snakeHead.y == snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_ES && snake->snakeHead.x == snake->snakeBody[0].x && snake->snakeHead.y > snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_WN && snake->snakeHead.x < snake->snakeBody[0].x && snake->snakeHead.y == snake->snakeBody[0].y) // 
+				)
+		{
+			snake->snakeBody[0].state = W_BODY_SW;
+		}
+		// Sprite mende-iparrera bira
+		else if ((snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.x > snake->snakeTail.x && snake->snakeHead.y < snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x < snake->snakeBody[0].x && snake->snakeHead.y > snake->snakeTail.y) // 
+				 || (snake->snakeBody[0].state == W_BODY_NE && snake->snakeHead.x == snake->snakeBody[0].x && snake->snakeHead.y < snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_ES && snake->snakeHead.x == snake->snakeBody[0].x && snake->snakeHead.y < snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_ES && snake->snakeHead.x < snake->snakeBody[0].x && snake->snakeHead.y == snake->snakeBody[0].y) // 
+				 || (snake->snakeBody[0].state == W_BODY_SW && snake->snakeHead.x < snake->snakeBody[0].x && snake->snakeHead.y == snake->snakeBody[0].y) // 
+				)
+		{
+			snake->snakeBody[0].state = W_BODY_WN;
 		}
 		
 		// if-elseif sententzia honek sugearen isatsaren biraketa kontrolatuko du
@@ -229,7 +234,6 @@ void updateRotationStateSnake(Snake* snake)
 				snake->snakeTail.state = W_TAIL_UP;
 			}
 		}
-
 		// Isatsa gorantz edo beherantz mugitzen ari bada
 		else if (snake->snakeTail.state == W_TAIL_UP || snake->snakeTail.state == W_TAIL_DOWN)
 		{
@@ -245,6 +249,54 @@ void updateRotationStateSnake(Snake* snake)
 			else if (snake->snakeBody[0].x < snake->snakeTail.x)
 			{
 				snake->snakeTail.state = W_TAIL_LEFT;
+			}
+		}
+	}
+}
+
+/*!
+ * \brief Sugearen erakuslea jaso eta honi egoera berria ezarriko dio teklatutik
+ * jasotako norabidera, baldin eta soilik baldin aukera badu norabidez aldatzeko.
+ * 
+ * \param snake suge objektuaren erakuslea
+ */
+void updateRotationStateSnakeHead(Snake *snake)
+{
+	// Sugeak biratzeko aukera badu
+	if (canSnakeRotate == SNAKE_CAN_ROTATE)
+	{
+		int keys = keysDown(); // Teklak detektatu
+
+		// If sententzia honek sugearen buruaren biraketa kontrolatuko du
+		if (keys) // Teklarik sakatu bada
+		{
+			/* Eskubi tekla sakatu bada eta sugea ezkerreratz ez badoa,
+			sugearen egoera eskubirantz ezarri eta biratzeko aukera kendu. */
+			if (keys & KEY_RIGHT && snake->snakeHead.state != W_HEAD_LEFT)
+			{
+				snake->snakeHead.state = W_HEAD_RIGHT;
+				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			}
+			/* Ezker tekla sakatu bada eta sugea eskubirantz ez badoa,
+			sugearen egoera ezkerrerantz ezarri eta biratzeko aukera kendu. */
+			else if (keys & KEY_LEFT && snake->snakeHead.state != W_HEAD_RIGHT)
+			{
+				snake->snakeHead.state = W_HEAD_LEFT;
+				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			}
+			/* Behera tekla sakatu bada eta sugea gorantz ez badoa,
+			sugearen egoera beherantz ezarri eta biratzeko aukera kendu. */
+			else if (keys & KEY_DOWN && snake->snakeHead.state != W_HEAD_UP)
+			{
+				snake->snakeHead.state = W_HEAD_DOWN;
+				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
+			}
+			/* Gora tekla sakatu bada eta sugea beherantz ez badoa,
+			sugearen egoera gorantz ezarri eta biratzeko aukera kendu. */
+			else if (keys & KEY_UP && snake->snakeHead.state != W_HEAD_DOWN)
+			{
+				snake->snakeHead.state = W_HEAD_UP;
+				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 			}
 		}
 	}

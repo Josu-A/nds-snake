@@ -20,4 +20,10 @@ extern void showSubBgGamemodeSelect();
  */ 
 extern void showMainBgGamemodeSelectModes();
 
+/*!
+ * \brief Beheko pantailan jokatzerakoan agertzen den fondoa kopiatzen du pantaila
+ * nagusiko 3 fondoaren helbidera, 16 bit kolore mota erabiliz.
+ */ 
+extern void showMainBgGameplay();
+
 #endif
