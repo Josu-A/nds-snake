@@ -4,8 +4,6 @@
 #include "objectSnake.h"
 #include "objectApple.h"
 
-#define COLORS_PER_SPRITE 16
-
 /*!
  * \brief Suge osoaren egoera eta animazioaren framearekin momentuko sub-spritearen
  * indizea kalkulatzen du atal bakoitzarentzat. Indize honen bitartez memorian

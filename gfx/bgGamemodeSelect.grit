@@ -7,5 +7,5 @@
 # Bitmap image
 -gb
 
-# Set the bit depth to 16
--gB16
+# Set the bit depth to 8
+-gB8

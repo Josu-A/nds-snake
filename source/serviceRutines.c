@@ -7,6 +7,7 @@
 #include "objectSnake.h"
 #include "objectApple.h"
 #include "sprites.h"
+#include "backgrounds.h"
 
 /*!
  * \brief Etenen bidez konfiguratutako teklatuek jautiko duten funtzio nagusia.
@@ -18,6 +19,8 @@ void interruptKeys()
 		if (keysCurrent() & KEY_START)
 		{
 			clearConsoleLines(&bottomScreenConsole, 0, 31, 0, 23);
+			showBgGamemodeSelect();
+			showBgGamemodeSelectModes();
 			AUTOMATON_STATE = AUTOMATON_SELECTION;
 		}
 	}
@@ -36,7 +39,9 @@ void interruptKeys()
 		{
 			resetGameConfig();
 			clearConsoleLines(&topScreenConsole, 12, 13, 15, 15);
+			clearConsoleLines(&bottomScreenConsole, 0, 31, 0, 23);
 			showButton(&buttonGameTime, &topScreenConsole);
+			displayApple(&apple);
 			AUTOMATON_STATE = AUTOMATON_PLAYING;
 		}
 	}
@@ -53,17 +58,46 @@ void interruptTimer0()
 	}
 	else if (AUTOMATON_STATE == AUTOMATON_PLAYING)
 	{
+		timeLeftToPlay--;
+
 		static int speedCounter = 0;
 		speedCounter++;
 		if (speedCounter >= ANIMATION_SPEED)
 		{
 			changeAnimationFrameSnake(&snake);
 			moveSnake(&snake);
+			displaySnake(&snake); // Sugearen sprite eguneratua pantailatzen da
 			speedCounter = 0;
-		}
 
-		timeLeftToPlay--;
-		showRealTimeTimer(timeLeftToPlay, &timeLeftToPlayNormalized, &topScreenConsole, 29, 22);
+			// Sugeak sagarra jaten badu
+			if (appleCollidesSnake(&apple, &snake))
+			{
+				score += SCORE_INCREMENT; // Puntuazioa inkrementatuko da
+
+				/* Denbora extra gehituko da, baldin eta soilik baldin 99 segundu
+				 baino gutxiago falta badira jolasa bukatzeko, eta gehienez 99
+				 segundura iritsiko da gelditzen den denbora */
+				if (timeLeftToPlayNormalized <= 99 - TIME_BONUS_NORMALIZED)
+				{
+					timeLeftToPlay += TIME_BONUS; // Denbora extra irabazi
+				}
+				else if (timeLeftToPlayNormalized < 99) {
+					timeLeftToPlay = 99 * ETEN_SEGUNDUKO;
+				}
+
+				resetApple(&apple); // Sagarra ezkutatu eta posizio berria ezarriko zaio
+
+				// Bukaera modua duen jolasa aukeratu ezean eta irabazi bada
+				if (selectedGameMode == GAMEMODE_LIMITED && score >= MAX_SCORE)
+				{
+					hideButton(&buttonGameTime, &topScreenConsole);
+					hideSnake(&snake);
+					hideApple(&apple);
+					AUTOMATON_STATE = AUTOMATON_ENDING;
+				}
+			}
+		}
+		
 		if (timeLeftToPlay == 0 || isSnakeDead == SNAKE_DEAD)
 		{
 			hideButton(&buttonGameTime, &topScreenConsole);
@@ -78,10 +112,24 @@ void interruptTimer0()
 		endingTimer--;
 		showRealTimeTimer(endingTimer, &endingTimerNormalized, &topScreenConsole, 12, 15);
 
+		if (isSnakeDead == SNAKE_ALIVE)
+		{
+			consoleSelect(&bottomScreenConsole);
+			iprintf("\x1b[%d;%dH%s", 6, 2, "You won, apparently!");
+		}
+		else
+		{
+			consoleSelect(&bottomScreenConsole);
+			iprintf("\x1b[%d;%dH%s", 6, 2, "You lost, looser!");
+		}
+
 		if (endingTimer == 0)
 		{
 			selectedGameMode = GAMEMODE_NONE;
 			clearConsoleLines(&topScreenConsole, 12, 13, 15, 15);
+			clearConsoleLines(&bottomScreenConsole, 0, 31, 0, 23);
+			showBgGamemodeSelect();
+			showBgGamemodeSelectModes();
 			AUTOMATON_STATE = AUTOMATON_SELECTION;
 		}
 	}

@@ -10,6 +10,7 @@
 #include "backgrounds.h"
 #include "gui.h"
 #include "objectSnake.h"
+#include "objectApple.h"
 #include "sprites.h"
 
 /*!
@@ -66,8 +67,8 @@ void resetGameConfig()
 													 // each game finishes to its max value, in seconds
 	timeLeftToPlay = MAX_GAME_TIME; // Reset the time left to play to its max value, in interruptions
 	timeLeftToPlayNormalized = MAX_GAME_TIME_NORMALIZED; // Reset the time left to play to its max value, in seconds
-	resetSnake(&snake);
-	resetApple(&apple);
+	resetSnake(&snake); // Sugearen aldagaiak hasierako baliora itzuli
+	resetApple(&apple); // Sagarraren aldagaiak hasierako baliora itzuli
 }
 
 /*!
@@ -88,13 +89,15 @@ void jokoa01()
 	
 	setInterruptionServiceRutines(); // Eten zerbitzu-errutinak ezarri
 	configureKeys(KEY_SELECT | KEY_START); // SELECT eta START teklak etenen bidez sinkronizatu
-	int latch = (1<<16) - (1<<25) / (ETEN_SEGUNDOKO * (1<<10)); // Latch-a lortu
+	int latch = (1<<16) - (1<<25) / (ETEN_SEGUNDUKO * (1<<10)); // Latch-a lortu
 	configureTimer0(latch, 0x1<<6 | 0x3<<0); // 0 denoragailua konfiguratu
 	allowInterruptsKeys(); // Teklatuaren etenak baimendu
 	allowInterruptsTimer0(); // 0 denboragailuaren etenak baimendu
 	startClockTimer0(); // 0 denboragailua martxan jarri
 
 	createButtons(); // Pantailaratzeko botoiak sortu
+	
+	showTitleTopScreen();
 
 	// Loop nagusia
 	while(1)
@@ -131,8 +134,7 @@ void jokoa01()
 			
 			// Goiko pantailan geratzen den denbora testua ezarri
 			showButton(&buttonGameTime, &topScreenConsole);
-
-			displayApple(&apple);
+			displayApple(&apple); // Sagarra pantailaratzen da
 			
 			AUTOMATON_STATE = AUTOMATON_PLAYING; // Egoera jolasten ezarri
 		}
@@ -141,7 +143,8 @@ void jokoa01()
 			scanKeys(); // Teklatuaren egoera eguneratzen du libnds-ko funtzioak erabiltzeko
 			updateRotationStateSnake(&snake); // Teklatutik norabide berria lortzen du
 			animateSnake(&snake); // Eguneratutako sub-sprite berria memorian ezartzen du erakusteko
-			displaySnake(&snake); // Sugearen sprite eguneratua pantailatzen da
+
+			showRealTimeTimer(timeLeftToPlay, &timeLeftToPlayNormalized, &topScreenConsole, 29, 22);
 
 			// Bukatzen den modua aukeratuz gero eta puntuazio maximora iristerakoan, jokoa amaitu.
 			if (selectedGameMode == GAMEMODE_LIMITED && score == MAX_SCORE)

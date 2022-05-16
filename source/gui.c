@@ -123,18 +123,17 @@ void pressStartAnimate()
 
 void showRealTimeTimer(int interruptTimer, int *secTimer, PrintConsole *console, int x, int y)
 {
+	*secTimer = interruptTimer / ETEN_SEGUNDUKO;
 	if (interruptTimer % SEG_1 == 0)
 	{
-		*secTimer -= 1;
-		int temp = *secTimer;
 		consoleSelect(console);
-		if (temp / 10 != 0)
+		if (*secTimer / 10 != 0)
 		{
-			iprintf("\x1b[%d;%dH%d", y, x, temp);
+			iprintf("\x1b[%d;%dH%d", y, x, *secTimer);
 		}
 		else
 		{
-			iprintf("\x1b[%d;%dH %d", y, x, temp);
+			iprintf("\x1b[%d;%dH %d", y, x, *secTimer);
 		}
 	}
 }

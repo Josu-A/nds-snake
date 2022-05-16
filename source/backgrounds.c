@@ -7,25 +7,9 @@
 #include "definitions.h"
 #include "graphics.h"
 
-#include "Atea.h"
-#include "AteaIrekita.h"
 #include "titleTopScreen.h"
-
-void erakutsiAtea() {
-	
-	dmaCopyHalfWords(DMA_CHANNEL,
-                     AteaBitmap, /* Automatikoki sortzen den aldagaia */
-                     (uint16 *)BG_BMP_RAM(0), /* Fondo nagusiaren helbidea */
-                     AteaBitmapLen); /* Luzera (bytetan) automatikoki sortzen den aldagaia */
-}
-
-void erakutsiAteaIrekita() {
-		
-    dmaCopyHalfWords(DMA_CHANNEL,
-                     AteaIrekitaBitmap, /* Automatikoki sortzen den aldagaia */
-                     (uint16 *)BG_BMP_RAM(0), /* Fondo nagusiaren helbidea */
-                     AteaIrekitaBitmapLen); /* Luzera (bytetan) automatikoki sortzen den aldagaia */
-}
+#include "bgGamemodeSelect.h"
+#include "bgGamemodeSelectModes.h"
 
 /*!
  * \brief Goiko pantailan jokoaren banner nagusia kopiatzen du bigarren pantailako
@@ -42,4 +26,32 @@ void showTitleTopScreen()
                      titleTopScreenPal, /* Automatikoki sortzen den aldagaia */
                      BG_PALETTE_SUB, /* Bigarren mailako pantailaren paletaren helbidea */
                      titleTopScreenPalLen); /* Luzera (bytetan) automatikoki sortzen den aldagaia */
+}
+
+/*!
+ * \brief Goiko pantailan joko motak aukeratzerakoan agertzen den titulua kopiatzen
+ * du bigarren pantailako 3 fondoaren helbidera, 8 bmp-eko kolore paleta izanda.
+ */
+void showBgGamemodeSelect()
+{
+    dmaCopyHalfWords(DMA_CHANNEL,
+                     bgGamemodeSelectBitmap,
+                     bgGetGfxPtr(bg3Sub),
+                     bgGamemodeSelectBitmapLen);
+    dmaCopyHalfWords(DMA_CHANNEL,
+                     bgGamemodeSelectPal,
+                     BG_PALETTE_SUB,
+                     bgGamemodeSelectPalLen);
+}
+
+/*!
+ * \brief Beheko pantailan joko motak aukeratzeko fondoa kopiatzen du pantaila
+ * nagusiko 3 fondoaren helbidera, 16bit kolore mota erabiliz.
+ */ 
+void showBgGamemodeSelectModes()
+{
+	dmaCopyHalfWords(DMA_CHANNEL,
+                     bgGamemodeSelectModesBitmap, /* Automatikoki sortzen den aldagaia */
+                     (uint16 *)BG_BMP_RAM(8), /* Fondo nagusiaren helbidea */
+                     bgGamemodeSelectModesBitmapLen); /* Luzera (bytetan) automatikoki sortzen den aldagaia */
 }

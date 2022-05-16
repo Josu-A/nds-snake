@@ -97,17 +97,17 @@ extern PrintConsole bottomScreenConsole;
  * \brief Timer0-ren zerbitzu errutinak segunduro zenbat eten sortu behar
  * dituen gordetzen du.
  */
-#define ETEN_SEGUNDOKO 4
+#define ETEN_SEGUNDUKO 4
 
 /*!
- * \brief Segundo erdia igarotzeko gertatu behar den eten kopurua da.
+ * \brief Segundu erdia igarotzeko gertatu behar den eten kopurua da.
  */
-#define SEG_0_5 (ETEN_SEGUNDOKO / 2)
+#define SEG_0_5 (ETEN_SEGUNDUKO / 2)
 
 /*!
- * \brief Segundo bat igarotzeko gertatu behar den eten kopurua da.
+ * \brief Segundu bat igarotzeko gertatu behar den eten kopurua da.
  */
-#define SEG_1 (ETEN_SEGUNDOKO * 1)
+#define SEG_1 (ETEN_SEGUNDUKO * 1)
 
 /*!
  * \brief Jolasa bukatzeko dauden segundu kopurua.
@@ -117,7 +117,7 @@ extern PrintConsole bottomScreenConsole;
 /*!
  * \brief Jolasa bukatzeko dauden eten kopurua.
  */
-#define MAX_GAME_TIME (ETEN_SEGUNDOKO * MAX_GAME_TIME_NORMALIZED)
+#define MAX_GAME_TIME (ETEN_SEGUNDUKO * MAX_GAME_TIME_NORMALIZED)
 
 /*!
  * \brief Jokoa amaitzean jolas mota aukeraketara itzultzeko dauden segundu
@@ -129,7 +129,7 @@ extern PrintConsole bottomScreenConsole;
  * \brief Jokoa amaitzean jolas mota aukeraketara itzultzeko dauden eten
  * kopuru maximoak.
  */
-#define MAX_END_TIME (ETEN_SEGUNDOKO * MAX_END_TIME_NORMALIZED)
+#define MAX_END_TIME (ETEN_SEGUNDUKO * MAX_END_TIME_NORMALIZED)
 
 /*!
  * \brief Jolasteko gelditzen den denbora etenalditan.
@@ -161,6 +161,21 @@ extern int endingTimerNormalized;
  * \brief Joku modu mugatuan irabazteko iritsi behar den puntuazioa.
  */
 #define MAX_SCORE 200
+
+/*!
+ * \brief Sagarra jateak ematen dituen puntuak.
+ */
+#define SCORE_INCREMENT 100
+
+/*!
+ * \brief Sagarra jateak ematen duen denobora extra segundutan.
+ */
+#define TIME_BONUS_NORMALIZED 40
+
+/*!
+ * \brief Sagarra jateak ematen duen denbora extra etenetan.
+ */
+#define TIME_BONUS (TIME_BONUS_NORMALIZED * ETEN_SEGUNDUKO)
 
 /*!
  * \brief Partidako puntuazioa gordetzen du.

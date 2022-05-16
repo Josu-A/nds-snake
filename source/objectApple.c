@@ -2,10 +2,12 @@
 #include <stdio.h>		//c-ko liburutegi estandarra sarrera eta irteerako funtzioak definitzen dituena
 #include <stdlib.h>		//c-ko liburutegi estandarra memoria erreserbak eta zenbaki konbertsioak egiteko
 #include <unistd.h>		//Sistema eragileen arteko konpatibilitatea ziurtatzeko liburutegia
+#include <time.h>
 
 #include "objectApple.h"
 #include "definitions.h"
 #include "objectSnake.h"
+#include "sprites.h"
 
 /*!
  * \brief Sagar objektua gordetzen du.
@@ -46,6 +48,7 @@ static long randomMaxValue(long max)
     unsigned long modulus = numRandomVal % (unsigned long) max;
 
     long x; // zorizko aldagaia gordetzeko
+    srand(time(NULL));
     do
     {
         x = random(); // 0tik 2^31-1ra zorizko balioa lortu
@@ -103,13 +106,27 @@ void newRandomPositionApple(Apple *apple)
 }
 
 /*!
+ * \brief Sugea eta sagarra txokatu diren itzultzen du. Horretarako, suge
+ * burua dagoen tile-a eta sagarra dagoen tile-a konparatzen ditu.
+ * 
+ * \param apple sagar objektuaren erakuslea
+ * \param snake suge objektuaren erakuslea
+ * \return true suge burua sagarraren tile berdinean badago, false bestela
+ */
+bool appleCollidesSnake(Apple *apple, Snake *snake)
+{
+    return (apple->x / TILE_LENGTH == snake->snakeBody->x / TILE_LENGTH) 
+           && (apple->y / TILE_LENGTH == snake->snakeBody->y / TILE_LENGTH);
+}
+
+/*!
  * \brief Sagarra berrezartzen du.
  * 
  * \param apple sagar objektuaren erakuslea
  */
 void resetApple(Apple *apple)
 {
-    apple->isOnMap = false;
+    hideApple(apple);
     newRandomPositionApple(apple);
-    apple->isOnMap = true;
+    displayApple(apple); // Sagarra pantailaratzen da
 }

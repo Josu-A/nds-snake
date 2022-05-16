@@ -21,6 +21,14 @@
         "spritesnakehead.h": "c",
         "array": "c",
         "algorithm": "c",
-        "numeric": "c"
+        "numeric": "c",
+        "chrono": "c",
+        "ctime": "c",
+        "limits": "c",
+        "ratio": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "*.def": "c"
     }
 }

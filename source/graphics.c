@@ -46,7 +46,7 @@ int bg3Sub;
  */
 static void initVideo() {
     vramSetPrimaryBanks(VRAM_A_MAIN_BG_0x06020000,
-                        VRAM_B_MAIN_BG_0x06040000,
+                        VRAM_B_LCD,
                         VRAM_C_SUB_BG_0x06200000,
                         VRAM_D_SUB_SPRITE);
     vramSetBankE(VRAM_E_MAIN_SPRITE);
@@ -93,55 +93,25 @@ static void initVideo() {
  * - Geruzaren lehentasunari balio baxuena ezarri.
  */
 static void initBackgrounds() {
-    /**
-     * Pantaila nagusiko 3 fondoaren afinitatea ezarri 16 biteko koloretarako.
-     */
+    /* Pantaila nagusiko 3 fondoaren afinitatea ezarri 16 biteko koloretarako. */
     REG_BG3CNT = BG_BMP16_256x256 |
-                 BG_BMP_BASE(1) | // Memoriako hasierako helbidea
+                 BG_BMP_BASE(8) | // Memoriako hasierako helbidea
                  BG_PRIORITY(BG_PRIORITY_3); // Lehentasun baxua
 
-    /**
-     * Pantaila nagusiko 3 fondoaren transformazio matrizeari identitate matrizea
-     * esleitu.
-     */
+    /* Pantaila nagusiko 3 fondoaren transformazio matrizeari identitate matrizea
+       esleitu. */
     REG_BG3PA = 1 << 8;
     REG_BG3PB = 0;
     REG_BG3PC = 0;
     REG_BG3PD = 1 << 8;
 
-    /**
-     * Pantaila nagusiko 3 fondoaren posizo egoera ezartzen du, (0, 0) goi-ezkerreko
-     * puntua izanez.
-     */
+    /* Pantaila nagusiko 3 fondoaren posizo egoera ezartzen du, (0, 0)
+       goi-ezkerreko puntua izanez. */
     REG_BG3X = 0;
     REG_BG3Y = 0;
-
-    /**
-     * Pantaila nagusiko 2 fondoaren afinitatea ezarri 16 biteko koloretarako.
-     */
-    REG_BG2CNT = BG_BMP16_128x128 |
-                 BG_BMP_BASE(9) | // Memoriako hasierako helbidea
-                 BG_PRIORITY(BG_PRIORITY_2);  // Lehentasun baxua
-
-    /**
-     * Pantaila nagusiko 2 fondoaren transformazio matrizeari identitate matrizea esleitu.
-     */
-    REG_BG2PA = 1 << 8;
-    REG_BG2PB = 0;
-    REG_BG2PC = 0;
-    REG_BG2PD = 1 << 8;
-
-    /**
-     * Pantaila nagusiko 2 fondoaren posizo egoera ezartzen du, (0, 0) goi-ezkerreko
-     * puntua izanez.
-     */
-    REG_BG2X = -(SCREEN_WIDTH / 2 - 32) << 8;
-    REG_BG2Y = -32 << 8;
-
     
-    /**
-     *  Bigarren mailako pantailako 3 fondoaren afinitatea ezarri 8 biteko koloretarako. 
-     */
+    /* Bigarren mailako pantailako 3 fondoa hasieratzen du 256x256 tamainako
+       eta 8 biteko koloredunaren fondoentzat. */
     bg3Sub = bgInitSub(3, BgType_Bmp8, BgSize_B8_256x256, 1, 0);
     bgSetPriority(bg3Sub, BG_PRIORITY(BG_PRIORITY_3));
 }
@@ -158,19 +128,18 @@ static void initBackgrounds() {
  */
 void hasieratuGrafikoakSpriteak()
 {
-    /** 2D grafiko motorea pizten du. */
+    /* 2D grafiko motorea pizten du. */
 	powerOn(POWER_ALL_2D);
 
-    /** Pantaila nagusia beheko pantaila fisikoan ezartzen du. */
+    /* Pantaila nagusia beheko pantaila fisikoan ezartzen du. */
     lcdMainOnBottom();
-    /** VRAM-a mapeatzen du bi pantailetan irudiak erakutsi ahal izateko. */
+    /* VRAM-a mapeatzen du bi pantailetan irudiak erakutsi ahal izateko. */
     initVideo();
 
-    /** Fondo sistema konfiguratzen du. */
+    /* Fondo sistema konfiguratzen du. */
     initBackgrounds();
-    showTitleTopScreen();
 
-    /** Spriteak hasieratu. */
+    /* Spriteak hasieratu. */
     initSprites();
 
     consoleInit(&topScreenConsole, 2, BgType_Text4bpp, BgSize_T_256x256, 2, 0, false, true);

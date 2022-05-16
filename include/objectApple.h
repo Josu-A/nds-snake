@@ -1,6 +1,8 @@
 #ifndef _OBJECTAPPLE_H_
 #define _OBJECTAPPLE_H_
 
+#include "objectSnake.h"
+
 /*!
  * \brief Sagar spritearen luzera/altuera
  */
@@ -17,8 +19,6 @@ typedef struct Apple
     u16 *spriteGfxMem; // Sprite-a gordeko den memoriaren helbidea gordetzen du
 
     int spriteId; // OAMen izango duen identifikatzailea
-
-    bool isOnMap;
 } Apple;
 
 /*!
@@ -42,13 +42,23 @@ extern void setPositionApple(Apple *apple, int x, int y);
  * 
  * \param apple sagar objektuaren erakuslea
  */
-void newRandomPositionApple(Apple *apple);
+extern void newRandomPositionApple(Apple *apple);
+
+/*!
+ * \brief Sugea eta sagarra txokatu diren itzultzen du. Horretarako, suge
+ * burua dagoen tile-a eta sagarra dagoen tile-a konparatzen ditu.
+ * 
+ * \param apple sagar objektuaren erakuslea
+ * \param snake suge objektuaren erakuslea
+ * \return true suge burua sagarraren tile berdinean badago, false bestela
+ */
+extern bool appleCollidesSnake(Apple *apple, Snake *snake);
 
 /*!
  * \brief Sagarra berrezartzen du.
  * 
  * \param apple sagar objektuaren erakuslea
  */
-void resetApple(Apple *apple);
+extern void resetApple(Apple *apple);
 
 #endif

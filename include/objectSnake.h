@@ -9,7 +9,7 @@
 /*!
  * \brief Sugearen mugimendua azkartzen edo moteltzen du. 1 azkarrena, IntSize motelena.
  */
-#define ANIMATION_SPEED 2
+#define ANIMATION_SPEED 1
 
 /*!
  * \brief Suge buruaren spritearen irudiak egoera bakoitzeko zenbat sub-sprite
