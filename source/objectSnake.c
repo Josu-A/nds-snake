@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include "objectSnake.h"
+#include "definitions.h"
 
 /*!
  * \brief Suge objektua gordetzen du.
@@ -28,13 +29,13 @@ SNAKE_DEATH_STATE isSnakeDead = SNAKE_ALIVE;
  * emandako x eta y balioekin.
  * 
  * \param snake suge objektuaren erakuslea
- * \param x posizio horizontala, 0tik SCREEN_WIDTH (256)-ra
- * \param y posizio bertikala,  0tik SCREEN_HEIGHT (192)-ra
+ * \param x posizio horizontala, 0tik 15ra (SCREEN_WIDTH / SNAKE_DIMENSION - 1)
+ * \param y posizio bertikala,  0tik 11ra (SCREEN_HEIGHT / SNAKE_DIMENSION - 1)
  */
-void setPositionSnake(Snake *snake, int x, int y)
+static void setPositionSnake(Snake *snake, int x, int y)
 {
-	snake->snakeHead.x = x;
-	snake->snakeHead.y = y;
+	snake->snakeHead.x = x * SNAKE_DIMENSION;
+	snake->snakeHead.y = y * SNAKE_DIMENSION;
 
 	snake->snakeBody[0].x = snake->snakeHead.x - SNAKE_DIMENSION;
 	snake->snakeBody[0].y = snake->snakeHead.y;
@@ -49,7 +50,7 @@ void setPositionSnake(Snake *snake, int x, int y)
  * 
  * \param snake suge objektuaren erakuslea
  */
-void setDefaultRotationSnake(Snake *snake)
+static void setDefaultRotationSnake(Snake *snake)
 {
 	snake->snakeHead.state = W_HEAD_RIGHT;
 	snake->snakeBody[0].state = W_BODY_HORIZONTAL;
@@ -152,27 +153,40 @@ void moveSnake(Snake *snake)
  */
 void updateRotationStateSnake(Snake* snake)
 {
+	// Sugeak biratzeko aukera badu
 	if (canSnakeRotate == SNAKE_CAN_ROTATE)
 	{
-		// Burua
-		int keys = keysDown();
-		if (keys)
+		int keys = keysDown(); // Teklak detektatu
+
+		// If sententzia honek sugearen buruaren biraketa kontrolatuko du
+		if (keys) // Teklarik sakatu bada
 		{
+			/* Eskubi tekla sakatu bada eta sugea ezkerreratz ez badoa,
+			sugearen egoera eskubirantz ezarri eta biratzeko aukera kendu. */
 			if (keys & KEY_RIGHT && snake->snakeHead.state != W_HEAD_LEFT)
 			{
 				snake->snakeHead.state = W_HEAD_RIGHT;
 				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
-			}	
+			}
+
+			/* Ezker tekla sakatu bada eta sugea eskubirantz ez badoa,
+			sugearen egoera ezkerrerantz ezarri eta biratzeko aukera kendu. */
 			else if (keys & KEY_LEFT && snake->snakeHead.state != W_HEAD_RIGHT)
 			{
 				snake->snakeHead.state = W_HEAD_LEFT;
 				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 			}
+
+			/* Behera tekla sakatu bada eta sugea gorantz ez badoa,
+			sugearen egoera beherantz ezarri eta biratzeko aukera kendu. */
 			else if (keys & KEY_DOWN && snake->snakeHead.state != W_HEAD_UP)
 			{
 				snake->snakeHead.state = W_HEAD_DOWN;
 				canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 			}
+
+			/* Gora tekla sakatu bada eta sugea beherantz ez badoa,
+			sugearen egoera gorantz ezarri eta biratzeko aukera kendu. */
 			else if (keys & KEY_UP && snake->snakeHead.state != W_HEAD_DOWN)
 			{
 				snake->snakeHead.state = W_HEAD_UP;
@@ -180,34 +194,54 @@ void updateRotationStateSnake(Snake* snake)
 			}
 		}
 		
-		// Gorputza
+		// if-elseif sententzia honek sugearen gorputzaren biraketa kontrolatuko du
+		/* Gorputza horizontalean mugitzen ari bada eta bere aurreko gorputz atala,
+		   burua kasu honetan, y ardatzeko posizio desberdinean badago, gorputzaren
+		   egoera bertikalera ezarri. */
 		if (snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.y != snake->snakeBody[0].y)
 		{
 			snake->snakeBody[0].state = W_BODY_VERTICAL;
 		}
+
+		/* Gorputza bertikalean mugitzen ari bada eta bere aurreko gorputz atala,
+		   burua kasu honetan, x ardatzeko posizio desberdinean badago, gorputzaren
+		   egoera horizontalera ezarri. */
 		else if (snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x != snake->snakeBody[0].x)
 		{
 			snake->snakeBody[0].state = W_BODY_HORIZONTAL;
 		}
 		
-		// Isatsa
+		// if-elseif sententzia honek sugearen isatsaren biraketa kontrolatuko du
+		// Isatsa eskubirantz edo ezkerrerantz mugitzen ari bada
 		if (snake->snakeTail.state == W_TAIL_RIGHT || snake->snakeTail.state == W_TAIL_LEFT)
 		{
+			/* eta bere aurreko gorputz atala, gorputza kasu honetan, y ardatzean
+			   gorago badago, isatsaren egoera beheraka ezarri. */
 			if (snake->snakeBody[0].y > snake->snakeTail.y)
 			{
 				snake->snakeTail.state = W_TAIL_DOWN;
 			}
+
+			/* eta bere aurreko gorputz atala, gorputza kasu honetan, y ardatzean
+			   beherago badago, isatsaren egoera goraka ezarri. */
 			else if (snake->snakeBody[0].y < snake->snakeTail.y)
 			{
 				snake->snakeTail.state = W_TAIL_UP;
 			}
 		}
+
+		// Isatsa gorantz edo beherantz mugitzen ari bada
 		else if (snake->snakeTail.state == W_TAIL_UP || snake->snakeTail.state == W_TAIL_DOWN)
 		{
+			/* eta bere aurreko gorputz atala, gorputza kasu honetan, x ardatzean
+			   gorago badago, isatsaren egoera eskubirantz ezarri. */
 			if (snake->snakeBody[0].x > snake->snakeTail.x)
 			{
 				snake->snakeTail.state = W_TAIL_RIGHT;
 			}
+
+			/* eta bere aurreko gorputz atala, gorputza kasu honetan, x ardatzean
+			   beherago badago, isatsaren egoera ezkerrerantz ezarri. */
 			else if (snake->snakeBody[0].x < snake->snakeTail.x)
 			{
 				snake->snakeTail.state = W_TAIL_LEFT;
@@ -225,13 +259,30 @@ void updateRotationStateSnake(Snake* snake)
  */
 void changeAnimationFrameSnake(Snake *snake)
 {
-	snake->snakeHead.animFrame++;
+	snake->snakeHead.animFrame++; // Buruaren hurrengo framearen indizea gorde
+	// Buruaren azkeneko framearen indizean badago, lehenengoa ezarri
 	if(snake->snakeHead.animFrame >= HEAD_FRAMES_PER_ANIMATION)
 		snake->snakeHead.animFrame = 0;
-	snake->snakeBody[0].animFrame++;
+	
+	snake->snakeBody[0].animFrame++;  // Gorputzaren hurrengo framearen indizea gorde
+	// Gorputzaren azkeneko framearen indizean badago, lehenengoa ezarri
 	if (snake->snakeBody[0].animFrame >= BODY_FRAMES_PER_ANIMATION)
 		snake->snakeBody[0].animFrame = 0;
-	snake->snakeTail.animFrame++;
+	
+	snake->snakeTail.animFrame++;  // Isatsaren hurrengo framearen indizea gorde
+	// Isatsaren azkeneko framearen indizean badago, lehenengoa ezarri
 	if(snake->snakeTail.animFrame >= TAIL_FRAMES_PER_ANIMATION)
 		snake->snakeTail.animFrame = 0;
+}
+
+/*!
+ * \brief Sugea berrezartzen du.
+ * 
+ * \param snake suge objektuaren erakuslea
+ */
+void resetSnake(Snake *snake)
+{
+	isSnakeDead = SNAKE_ALIVE;
+	setPositionSnake(snake, SCREEN_WIDTH_TILES / 2, SCREEN_HEIGHT_TILES / 2);
+	setDefaultRotationSnake(snake);
 }

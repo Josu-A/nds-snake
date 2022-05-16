@@ -5,6 +5,7 @@
 #include "definitions.h"
 #include "gui.h"
 #include "objectSnake.h"
+#include "objectApple.h"
 #include "sprites.h"
 
 /*!
@@ -67,6 +68,7 @@ void interruptTimer0()
 		{
 			hideButton(&buttonGameTime, &topScreenConsole);
 			hideSnake(&snake);
+			hideApple(&apple);
 			isSnakeDead = SNAKE_DEAD;
 			AUTOMATON_STATE = AUTOMATON_ENDING;
 		}

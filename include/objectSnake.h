@@ -198,21 +198,10 @@ extern void updateRotationStateSnake(Snake *snake);
 extern void changeAnimationFrameSnake(Snake *snake);
 
 /*!
- * \brief Sugearen erakuslea jasota honen posizioa ezartzen da pantailan
- * emandako x eta y balioekin.
- * 
- * \param snake suge objektuaren erakuslea
- * \param x posizio horizontala, 0tik SCREEN_WIDTH (256)-ra
- * \param y posizio bertikala,  0tik SCREEN_HEIGHT (192)-ra
- */
-extern void setPositionSnake(Snake *snake, int x, int y);
-
-/*!
- * \brief Sugearen erakuslea jasota honen hasierako norabide egoera
- * hasieratzen du.
+ * \brief Sugea berrezartzen du.
  * 
  * \param snake suge objektuaren erakuslea
  */
-extern void setDefaultRotationSnake(Snake *snake);
+extern void resetSnake(Snake *snake);
 
 #endif

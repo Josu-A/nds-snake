@@ -9,6 +9,21 @@
 #define DMA_CHANNEL 3
 
 /*!
+ * Kuadrante batek neurtzen dituen pixelak.
+ */
+#define TILE_LENGTH 16
+
+/*!
+ * Pantailaren luzera definitzen da kuadranteetan.
+ */
+#define SCREEN_WIDTH_TILES (SCREEN_WIDTH / TILE_LENGTH)
+
+/*!
+ * Pantailaren altuera definitzen da kuadranteetan.
+ */
+#define SCREEN_HEIGHT_TILES (SCREEN_HEIGHT / TILE_LENGTH)
+
+/*!
  *  \brief Ukimen-pantailari buruz informazioa gordetzen du.
  */
 extern touchPosition PANT_DAT;

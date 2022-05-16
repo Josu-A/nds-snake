@@ -1,4 +1,0 @@
-#ifndef _OBJECTSTOPWATCH_H_
-#define _OBJECTSTOPWATCH_H_
-
-#endif

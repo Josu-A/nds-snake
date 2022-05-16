@@ -66,16 +66,15 @@ void resetGameConfig()
 													 // each game finishes to its max value, in seconds
 	timeLeftToPlay = MAX_GAME_TIME; // Reset the time left to play to its max value, in interruptions
 	timeLeftToPlayNormalized = MAX_GAME_TIME_NORMALIZED; // Reset the time left to play to its max value, in seconds
-	isSnakeDead = SNAKE_ALIVE;
-	setPositionSnake(&snake, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-	setDefaultRotationSnake(&snake);
+	resetSnake(&snake);
+	resetApple(&apple);
 }
 
 /*!
  * \brief Ukimen pantaila ukitu den itzultzen du, true (1) gisa. Ez bada ukitu,
  * false (0) itzultzen du.
  */
-bool touchedTouchScreen(touchPosition *touchPad)
+static bool touchedTouchScreen(touchPosition *touchPad)
 {
 	return (touchPad->px != 0 || touchPad->py != 0);
 }
@@ -96,9 +95,6 @@ void jokoa01()
 	startClockTimer0(); // 0 denboragailua martxan jarri
 
 	createButtons(); // Pantailaratzeko botoiak sortu
-	saveIntoMemorySnakeHead(&snake); // Memorira gorde sugea
-	saveIntoMemorySnakeBody(&snake);
-	saveIntoMemorySnakeTail(&snake);
 
 	// Loop nagusia
 	while(1)
@@ -115,14 +111,17 @@ void jokoa01()
 			// Joku mota aukeratzeko begizta
 			while (selectedGameMode == GAMEMODE_NONE)
 			{
-				touchRead(&PANT_DAT);
+				touchRead(&PANT_DAT); // Ukimen pantaila eguneratu
+
+				// Bukatzen den moduaren testuaren gainean ukitu ezkero
 				if (touchedInsideButton(&buttonSelectModeLimited, &PANT_DAT))
 				{
-					selectedGameMode = GAMEMODE_LIMITED;
+					selectedGameMode = GAMEMODE_LIMITED; // Bukatzen den modua gorde
 				}
+				// Bukatzen ez den moduaren testuaren gainean ukitu ezkero
 				else if (touchedInsideButton(&buttonSelectModeUnlimited, &PANT_DAT))
 				{
-					selectedGameMode = GAMEMODE_UNLIMITED;
+					selectedGameMode = GAMEMODE_UNLIMITED; // Bukatzen ez den modua gorde
 				}
 			}
 
@@ -132,6 +131,8 @@ void jokoa01()
 			
 			// Goiko pantailan geratzen den denbora testua ezarri
 			showButton(&buttonGameTime, &topScreenConsole);
+
+			displayApple(&apple);
 			
 			AUTOMATON_STATE = AUTOMATON_PLAYING; // Egoera jolasten ezarri
 		}
@@ -139,11 +140,7 @@ void jokoa01()
 		{
 			scanKeys(); // Teklatuaren egoera eguneratzen du libnds-ko funtzioak erabiltzeko
 			updateRotationStateSnake(&snake); // Teklatutik norabide berria lortzen du
-			animateSnakeHead(&snake); // Sugeak izan behar duen frame berria lortzen du
-								      // eta spritea gordetzen den memoriako lekuan frame
-								      // berriaren helbidea ezartzen da.
-			animateSnakeBody(&snake);
-			animateSnakeTail(&snake);
+			animateSnake(&snake); // Eguneratutako sub-sprite berria memorian ezartzen du erakusteko
 			displaySnake(&snake); // Sugearen sprite eguneratua pantailatzen da
 
 			// Bukatzen den modua aukeratuz gero eta puntuazio maximora iristerakoan, jokoa amaitu.
