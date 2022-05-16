@@ -19,8 +19,8 @@ void interruptKeys()
 		if (keysCurrent() & KEY_START)
 		{
 			clearConsoleLines(&bottomScreenConsole, 0, 31, 0, 23);
-			showBgGamemodeSelect();
-			showBgGamemodeSelectModes();
+			showSubBgGamemodeSelect();
+			showMainBgGamemodeSelectModes();
 			AUTOMATON_STATE = AUTOMATON_SELECTION;
 		}
 	}
@@ -128,8 +128,8 @@ void interruptTimer0()
 			selectedGameMode = GAMEMODE_NONE;
 			clearConsoleLines(&topScreenConsole, 12, 13, 15, 15);
 			clearConsoleLines(&bottomScreenConsole, 0, 31, 0, 23);
-			showBgGamemodeSelect();
-			showBgGamemodeSelectModes();
+			showSubBgGamemodeSelect();
+			showMainBgGamemodeSelectModes();
 			AUTOMATON_STATE = AUTOMATON_SELECTION;
 		}
 	}

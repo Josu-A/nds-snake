@@ -96,8 +96,8 @@ void jokoa01()
 	startClockTimer0(); // 0 denboragailua martxan jarri
 
 	createButtons(); // Pantailaratzeko botoiak sortu
-	
-	showTitleTopScreen();
+
+	showSubBgGameTitleScreen();
 
 	// Loop nagusia
 	while(1)

@@ -1,15 +1,15 @@
 #ifndef _GRAPHICS_H_
 #define _GRAPHICS_H_
 
-/**
+/*!
  * Grafikoak eta spriteak hasieratzen ditu. Horretarako:
  * 
  * - 2D grafiko motorea pizten du.
  * - Pantaila nagusia beheko pantaila fisikoan ezartzen du.
  * - VRAM-a mapeatzen du bi pantailetan irudiak erakutsi ahal izateko.
  * - Fondo sistema konfiguratzen du.
- * - Hasiera pantailako titulua memorian txertatzen du.
  * - Spriteak hasieratzen ditu.
+ * - Kontsolak hasieratzen ditu.
  */
 extern void hasieratuGrafikoakSpriteak();
 
