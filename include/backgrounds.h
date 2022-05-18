@@ -26,4 +26,10 @@ extern void showMainBgGamemodeSelectModes();
  */ 
 extern void showMainBgGameplay();
 
+/*!
+ * \brief Goiko pantailan jokatze bitartean agertzen den fondoa kopiatzen du
+ * bigarren pantailako 3 fondoaren helbidera, 8 bmp-eko kolore paleta izanda.
+ */
+extern void showSubBgGameplayInfo();
+
 #endif

@@ -105,11 +105,7 @@ typedef enum SpriteSnakeTailState {
     W_TAIL_UP, // Suge isatsa gorantz doa
     W_TAIL_RIGHT, // Suge isatsa eskuinerantz doa
     W_TAIL_DOWN, // Suge isatsa beherantz doa
-    W_TAIL_LEFT, // Suge isatsa ezkerrerantz doa
-    W_TAIL_NE, // Suge isatsa biratzen ari da goitik eta eskuinetik
-    W_TAIL_ES, // Suge isatsa biratzen ari da eskuinetik eta behetik
-    W_TAIL_SW, // Suge isatsa biratzen ari da behetik eta ezkerretik
-    W_TAIL_WN // Suge isatsa biratzen ari da ezkerretik eta goitik
+    W_TAIL_LEFT // Suge isatsa ezkerrerantz doa
 } SpriteSnakeTailState;
 
 /*!
@@ -183,15 +179,32 @@ extern SNAKE_DEATH_STATE isSnakeDead;
  */
 extern void moveSnake(Snake *snake);
 
-extern void updateRotationStateSnakeBody(Snake *snake);
-
 /*!
- * \brief Sugearen erakuslea jaso eta honi egoera berria ezarriko dio teklatutik
- * jasotako norabidera, baldin eta soilik baldin aukera badu norabidez aldatzeko.
+ * \brief Sugearen erakuslea jaso eta suge buruaren egoera berria ezarriko dio
+ * teklatutik jasotako norabidera, baldin eta soilik baldin aukera badu norabidez
+ * aldatzeko.
  * 
  * \param snake suge objektuaren erakuslea
  */
 extern void updateRotationStateSnakeHead(Snake *snake);
+
+/*!
+ * \brief Sugearen erakuslea jaso eta suge gorputzaren egoera berria ezarriko
+ * dio teklatutik jasotako norabidera, baldin eta soilik baldin aukera badu
+ * norabidez aldatzeko.
+ * 
+ * \param snake suge objektuaren erakuslea
+ */
+extern void updateRotationStateSnakeBody(Snake *snake);
+
+/*!
+ * \brief Sugearen erakuslea jaso eta suge isatsaren egoera berria ezarriko
+ * dio teklatutik jasotako norabidera, baldin eta soilik baldin aukera badu
+ * norabidez aldatzeko.
+ * 
+ * \param snake suge objektuaren erakuslea
+ */
+extern void updateRotationStateSnakeTail(Snake *snake);
 
 /*!
  * \brief Sugearen norabide berdineko erakutsi beharreko sub-spritearen

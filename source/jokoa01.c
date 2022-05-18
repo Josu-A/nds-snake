@@ -132,10 +132,11 @@ void jokoa01()
 			hideButton(&buttonSelectModeLimited, &bottomScreenConsole);
 			hideButton(&buttonSelectModeUnlimited, &bottomScreenConsole);
 
-			showMainBgGameplay(); // /////////////////////////////////////////
+			showMainBgGameplay(); // Jokatze bitartean pantaia nagusiko fondoa ezarri
+			showSubBgGameplayInfo(); // Jokatze bitartean bigarren pantailako fondoa ezarri
 			
-			// Goiko pantailan geratzen den denbora testua ezarri
-			showButton(&buttonGameTime, &topScreenConsole);
+			showButton(&buttonGameTime, &topScreenConsole); // Goiko pantailan geratzen den denbora testua ezarri
+			showButton(&buttonScore, &topScreenConsole); // Goiko pantailan jokalariak daraman puntuazio testua ezarri
 			displayApple(&apple); // Sagarra pantailaratzen da
 			
 			AUTOMATON_STATE = AUTOMATON_PLAYING; // Egoera jolasten ezarri
@@ -146,7 +147,7 @@ void jokoa01()
 			updateRotationStateSnakeHead(&snake); // Teklatutik norabide berria lortzen du
 			animateSnake(&snake); // Eguneratutako sub-sprite berria memorian ezartzen du erakusteko
 
-			showRealTimeTimer(timeLeftToPlay, &timeLeftToPlayNormalized, &topScreenConsole, 29, 22);
+			showRealTimeTimer(timeLeftToPlay, &timeLeftToPlayNormalized, &topScreenConsole, 29, 2);
 
 			// Bukatzen den modua aukeratuz gero eta puntuazio maximora iristerakoan, jokoa amaitu.
 			if (selectedGameMode == GAMEMODE_LIMITED && score == MAX_SCORE)

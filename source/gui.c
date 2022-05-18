@@ -28,6 +28,11 @@ Button buttonResumeGame;
 Button buttonGameTime;
 
 /*!
+ * \brief Jokalariak daraman puntuazioa erakusteko testua.
+ */
+Button buttonScore;
+
+/*!
  * \brief Botoi/testu bat sortzeko erabiltzen da, barruko testua, lerrokatze
  * horizontala, eta posizio bertikala.
  * 
@@ -53,7 +58,7 @@ static void createButton(Button *button, char *content, TEXT_ALIGN align, int y)
 	   kopuruaren arabera */
 	if (align == TEXTALIGN_LEFT)
 	{
-		button->x = 0;
+		button->x = 1;
 	}
 	else if (align == TEXTALIGN_RIGHT)
 	{
@@ -73,7 +78,8 @@ void createButtons()
 	createButton(&buttonSelectModeLimited, "PUNTUAZIORA IRITSI", TEXTALIGN_CENTER, 7);
 	createButton(&buttonSelectModeUnlimited, "MUGARIK GABEA", TEXTALIGN_CENTER, 15);
 	createButton(&buttonResumeGame, "Pantaila ikutu jarraitzeko", TEXTALIGN_CENTER, 11);
-	createButton(&buttonGameTime, "Geratzen den denbora: 20 ", TEXTALIGN_RIGHT, 22);
+	createButton(&buttonGameTime, "Geratzen den denbora: 20 ", TEXTALIGN_RIGHT, 2);
+	createButton(&buttonScore, "Puntuazioa: 0", TEXTALIGN_LEFT, 6);
 }
 
 /*!

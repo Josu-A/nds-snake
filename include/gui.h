@@ -50,6 +50,11 @@ extern Button buttonResumeGame;
 extern Button buttonGameTime;
 
 /*!
+ * \brief Jokalariak daraman puntuazioa erakusteko testua.
+ */
+extern Button buttonScore;
+
+/*!
  * \brief Pantailaratu behar diren testu/botoi guztiak sortzen ditu.
  */
 extern void createButtons();

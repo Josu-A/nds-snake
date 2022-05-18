@@ -37,12 +37,17 @@ void interruptKeys()
 	{
 		if (keysCurrent() & KEY_SELECT)
 		{
-			resetGameConfig();
-			clearConsoleLines(&topScreenConsole, 12, 13, 15, 15);
+			resetGameConfig(); // Jolasteko aldagaiak berriz hasieratu
+
+			/* Bi kontsolak garbitu */
+			clearConsoleLines(&topScreenConsole, 0, 31, 0, 23);
 			clearConsoleLines(&bottomScreenConsole, 0, 31, 0, 23);
-			showButton(&buttonGameTime, &topScreenConsole);
-			displayApple(&apple);
-			AUTOMATON_STATE = AUTOMATON_PLAYING;
+
+			showButton(&buttonGameTime, &topScreenConsole); // Goiko pantailan geratzen den denbora testua ezarri
+			showButton(&buttonScore, &topScreenConsole); // Goiko pantailan jokalariak daraman puntuazio testua ezarri
+			displayApple(&apple); // Sagarra erakutsi
+
+			AUTOMATON_STATE = AUTOMATON_PLAYING; // Jolastera pasa
 		}
 	}
 }
@@ -68,12 +73,17 @@ void interruptTimer0()
 			moveSnake(&snake);
 			displaySnake(&snake); // Sugearen sprite eguneratua pantailatzen da
 			updateRotationStateSnakeBody(&snake);
+			updateRotationStateSnakeTail(&snake);
 			speedCounter = 0;
 
 			// Sugeak sagarra jaten badu
 			if (appleCollidesSnake(&apple, &snake))
 			{
-				score += SCORE_INCREMENT; // Puntuazioa inkrementatuko da
+				/* Puntuazioa inkrementatu eta puntuazio eguneratua pantailaratu */
+				score += SCORE_INCREMENT;
+				iprintf("\x1b[%d;%dH%d", buttonScore.y,
+				        buttonScore.x + buttonScore.contentLength - 1,
+						score);
 
 				/* Denbora extra gehituko da, baldin eta soilik baldin 99 segundu
 				 baino gutxiago falta badira jolasa bukatzeko, eta gehienez 99
@@ -91,7 +101,6 @@ void interruptTimer0()
 				// Bukaera modua duen jolasa aukeratu ezean eta irabazi bada
 				if (selectedGameMode == GAMEMODE_LIMITED && score >= MAX_SCORE)
 				{
-					hideButton(&buttonGameTime, &topScreenConsole);
 					hideSnake(&snake);
 					hideApple(&apple);
 					AUTOMATON_STATE = AUTOMATON_ENDING;
@@ -101,7 +110,6 @@ void interruptTimer0()
 		
 		if (timeLeftToPlay == 0 || isSnakeDead == SNAKE_DEAD)
 		{
-			hideButton(&buttonGameTime, &topScreenConsole);
 			hideSnake(&snake);
 			hideApple(&apple);
 			isSnakeDead = SNAKE_DEAD;
@@ -127,7 +135,7 @@ void interruptTimer0()
 		if (endingTimer == 0)
 		{
 			selectedGameMode = GAMEMODE_NONE;
-			clearConsoleLines(&topScreenConsole, 12, 13, 15, 15);
+			clearConsoleLines(&topScreenConsole, 0, 31, 0, 23);
 			clearConsoleLines(&bottomScreenConsole, 0, 31, 0, 23);
 			showSubBgGamemodeSelect();
 			showMainBgGamemodeSelectModes();
