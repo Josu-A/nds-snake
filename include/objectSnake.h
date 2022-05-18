@@ -36,7 +36,7 @@ typedef struct SnakeHead
     int y; // Objektuaren y posizioa gordetzen du
 
     u16 *spriteGfxMem; // Sprite-a gordeko den memoriaren helbidea gordetzen du
-    u8 *frameGfx; // Sprite-ak dituen tile kopurua gordetzen du. Tile bat = 4 pixel dira.
+    u8 *frameGfx; // Tile-dun sprite osoa erreferentziatzen du
 
     SpriteSnakeHeadState state; // Objektuaren egoera gordetzen du
     int animFrame; // Objektuaren egoeraren zenbatgarren fotograman dagoen adierazten du
@@ -81,7 +81,7 @@ typedef struct SnakeBody
     int y; // Objektuaren y posizioa gordetzen du
 
     u16 *spriteGfxMem; // Spritea gordeko den memoriaren helbidea gordetzen du
-    u8 *frameGfx; // Spriteak dituen tile kopurua gordetzen du. Tile bat = 4 pixel dira.
+    u8 *frameGfx; // Tile-dun sprite osoa erreferentziatzen du
 
     SpriteSnakeBodyState state; // Objektuaren egoera gordetzen du
     int animFrame; // Objektuaren egoeraren zenbatgarren fotograman dagoen adierazten du
@@ -114,7 +114,7 @@ typedef struct SnakeTail
     int y; // Objektuaren y posizioa gordetzen du
 
     u16 *spriteGfxMem; // Spritea gordeko den memoriaren helbidea gordetzen du
-    u8 *frameGfx; // Spriteak dituen tile kopurua gordetzen du. Tile bat = 4 pixel dira.
+    u8 *frameGfx; // Tile-dun sprite osoa erreferentziatzen du
 
     SpriteSnakeTailState state; // Objektuaren egoera gordetzen du
     int animFrame; // Objektuaren egoeraren zenbatgarren fotograman dagoen adierazten du

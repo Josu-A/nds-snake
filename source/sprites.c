@@ -162,8 +162,11 @@ static u8 spriteSnakeHead[4096] =
  */
 static void initSnakeHead(Snake *snake, u8 *gfx)
 {
+    // Suge burua pantailan agertzeko erabiliko den memoria helbide alokatu
     snake->snakeHead.spriteGfxMem = oamAllocateGfx(&oamMain, SpriteSize_16x16, SpriteColorFormat_256Color);
+    // Suge buruaren sprite osoa (norabide eta egoera guztiak) erreferentzia gisa gordetzen dira.
     snake->snakeHead.frameGfx = (u8*) gfx;
+    // Identifikatzailea ezarri
     snake->snakeHead.spriteId = 0;
 }
 
@@ -178,10 +181,15 @@ static void initSnakeHead(Snake *snake, u8 *gfx)
  */
 static void animateSnakeHead(Snake *snake)
 {
+    /* Suge buruaren tile egokiaren indizea lortzen du norabide eta animazioaren
+       arabera */
     int frame = snake->snakeHead.animFrame + snake->snakeHead.state
                 * HEAD_FRAMES_PER_ANIMATION;
+    /* Lortutako indizearekin sprite osoaren hasierako helbidetik behar duen offset-a
+       kalkulatzen da nahi den tile-a erakusteko. */
 	int offset = frame * SNAKE_DIMENSION * SNAKE_DIMENSION;
 
+    // Memoriara kopiatzen da lortu den tile-a, helbide bakoitzak bi 4 bit-eko tile gordetzen ditu.
     int i;
     for (i = 0; i < SNAKE_DIMENSION * SNAKE_DIMENSION / 2; i++)
         snake->snakeHead.spriteGfxMem[i] = snake->snakeHead.frameGfx[offset + i*2]
@@ -274,9 +282,13 @@ static u8 spriteSnakeBody[3072] =
  */
 static void initSnakeBody(Snake *snake, u8 *gfx)
 {
+    // Suge gorputza pantailan agertzeko erabiliko den memoria helbide alokatu
     snake->snakeBody[0].spriteGfxMem = oamAllocateGfx(&oamMain, SpriteSize_16x16, SpriteColorFormat_256Color);
+    // Suge gorputzaren sprite osoa (norabide eta egoera guztiak) erreferentzia gisa gordetzen dira.
     snake->snakeBody[0].frameGfx = (u8*) gfx;
+    // Sugeak dituen gorputz minimoak ezarri
     snake->numSnakeBody = MIN_SNAKE_BODY_PARTS;
+    // Identifikatzailea ezarri
     snake->snakeBody[0].spriteId = 1;
 }
 
@@ -291,10 +303,15 @@ static void initSnakeBody(Snake *snake, u8 *gfx)
  */
 static void animateSnakeBody(Snake *snake)
 {
+    /* Suge gorputzaren tile egokiaren indizea lortzen du norabide eta animazioaren
+       arabera */
     int frame = snake->snakeBody[0].animFrame + snake->snakeBody[0].state 
                 * BODY_FRAMES_PER_ANIMATION;
+    /* Lortutako indizearekin sprite osoaren hasierako helbidetik behar duen offset-a
+       kalkulatzen da nahi den tile-a erakusteko. */
     int offset = frame * SNAKE_DIMENSION * SNAKE_DIMENSION;
 
+    // Memoriara kopiatzen da lortu den tile-a, helbide bakoitzak bi 4 bit-eko tile gordetzen ditu.
     int i;
     for (i = 0; i < SNAKE_DIMENSION * SNAKE_DIMENSION / 2; i++)
         snake->snakeBody[0].spriteGfxMem[i] = snake->snakeBody[0].frameGfx[offset + i*2]
@@ -363,8 +380,11 @@ static u8 spriteSnakeTail[2048] =
  */
 static void initSnakeTail(Snake *snake, u8 *gfx)
 {
+    // Suge gorputza pantailan agertzeko erabiliko den memoria helbide alokatu
     snake->snakeTail.spriteGfxMem = oamAllocateGfx(&oamMain, SpriteSize_16x16, SpriteColorFormat_256Color);
+    // Suge gorputzaren sprite osoa (norabide eta egoera guztiak) erreferentzia gisa gordetzen dira.
     snake->snakeTail.frameGfx = (u8*) gfx;
+    // Identifikatzailea ezarri
     snake->snakeTail.spriteId = 2;
 }
 
@@ -379,10 +399,15 @@ static void initSnakeTail(Snake *snake, u8 *gfx)
  */
 static void animateSnakeTail(Snake *snake)
 {
+    /* Suge isatsaren tile egokiaren indizea lortzen du norabide eta animazioaren
+       arabera */
     int frame = snake->snakeTail.animFrame + snake->snakeTail.state
                 * TAIL_FRAMES_PER_ANIMATION;
+    /* Lortutako indizearekin sprite osoaren hasierako helbidetik behar duen offset-a
+       kalkulatzen da nahi den tile-a erakusteko. */
 	int offset = frame * SNAKE_DIMENSION * SNAKE_DIMENSION;
-
+    
+    // Memoriara kopiatzen da lortu den tile-a, helbide bakoitzak bi 4 bit-eko tile gordetzen ditu.
     int i;
     for (i = 0; i < SNAKE_DIMENSION * SNAKE_DIMENSION / 2; i++)
         snake->snakeTail.spriteGfxMem[i] = snake->snakeTail.frameGfx[offset + i*2]
@@ -543,9 +568,13 @@ static u8 spriteApple[256] =
  */
 static void initApple(Apple *apple, u8 *gfx)
 {
+    // Sagarra pantailan agertzeko erabiliko den memoria helbide alokatu
     apple->spriteGfxMem = oamAllocateGfx(&oamMain, SpriteSize_16x16, SpriteColorFormat_256Color);
+    // Identifikatzailea ezarri
     apple->spriteId = 3;
 
+    /* Memoriara kopiatzen da lortu parametroz jasotako spritea, helbide bakoitzak
+       bi 4 bit-eko tile gordetzen ditu. */
     int i;
     for (i = 0; i < APPLE_DIMENSION * APPLE_DIMENSION / 2; i++)
         apple->spriteGfxMem[i] = gfx[i*2]
@@ -607,13 +636,12 @@ void hideApple(Apple *apple)
  */
 void initSprites()
 {
-    setMainPallete();
+    setMainPallete(); // Pantaila nagusiko spriten paleta ezarri
 
     oamInit(&oamMain, SpriteMapping_1D_128, false);   // Jadanik oamUpdate(&oamMain) exekutatzen du
-    oamInit(&oamSub, SpriteMapping_1D_32, false);    // Jadanik oamUpdate(&oamSub) exekutatzen du
 
-    initSnakeHead(&snake, spriteSnakeHead);
-    initSnakeBody(&snake, spriteSnakeBody);
-    initSnakeTail(&snake, spriteSnakeTail);
-    initApple(&apple, spriteApple);
+    initSnakeHead(&snake, spriteSnakeHead); // Suge burua hasieratzen du
+    initSnakeBody(&snake, spriteSnakeBody); // Suge gorputza hasieratzen du
+    initSnakeTail(&snake, spriteSnakeTail); // Suge isatsa hasieratzen du
+    initApple(&apple, spriteApple); // Sagarra hasieratzen du
 }
