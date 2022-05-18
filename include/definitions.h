@@ -160,7 +160,7 @@ extern int endingTimerNormalized;
 /*!
  * \brief Joku modu mugatuan irabazteko iritsi behar den puntuazioa.
  */
-#define MAX_SCORE 200
+#define MAX_SCORE 2000
 
 /*!
  * \brief Sagarra jateak ematen dituen puntuak.
@@ -170,7 +170,7 @@ extern int endingTimerNormalized;
 /*!
  * \brief Sagarra jateak ematen duen denobora extra segundutan.
  */
-#define TIME_BONUS_NORMALIZED 40
+#define TIME_BONUS_NORMALIZED 3
 
 /*!
  * \brief Sagarra jateak ematen duen denbora extra etenetan.

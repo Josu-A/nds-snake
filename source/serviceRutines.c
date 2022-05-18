@@ -10,6 +10,18 @@
 #include "backgrounds.h"
 
 /*!
+ * \brief Integer overflow-a gertatu ez dadin score balioak hartu dezakeen
+ * balio maximoa ematen du, beste inkrementu bat egitean overflow-a ez gertatzeko.
+ * 
+ * \return score balioak izan dezakeen balio fisiko maximoa
+ */
+static int maxIntScoreAllowedToAdd()
+{
+	int tmp = ((unsigned int) (8 << (sizeof(int) * 7))) - 1;
+	return tmp - SCORE_INCREMENT;
+}
+
+/*!
  * \brief Etenen bidez konfiguratutako teklatuek jautiko duten funtzio nagusia.
  */
 void interruptKeys()
@@ -80,7 +92,8 @@ void interruptTimer0()
 			if (appleCollidesSnake(&apple, &snake))
 			{
 				/* Puntuazioa inkrementatu eta puntuazio eguneratua pantailaratu */
-				score += SCORE_INCREMENT;
+				if (score <= maxIntScoreAllowedToAdd()) // integer overflow gertatu ez dadin check-a
+					score += SCORE_INCREMENT;
 				iprintf("\x1b[%d;%dH%d", buttonScore.y,
 				        buttonScore.x + buttonScore.contentLength - 1,
 						score);

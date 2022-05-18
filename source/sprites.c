@@ -17,7 +17,7 @@
  */
 static int convert8BitsTo4Bits(int value8Bit)
 {
-    return value8Bit * ((1<<4) - 1) / ((1<<8) - 1);
+    return value8Bit * ((1<<5) - 1) / ((1<<8) - 1);
 }
 
 /*!

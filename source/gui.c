@@ -77,7 +77,7 @@ void createButtons()
 {
 	createButton(&buttonSelectModeLimited, "PUNTUAZIORA IRITSI", TEXTALIGN_CENTER, 7);
 	createButton(&buttonSelectModeUnlimited, "MUGARIK GABEA", TEXTALIGN_CENTER, 15);
-	createButton(&buttonResumeGame, "Pantaila ikutu jarraitzeko", TEXTALIGN_CENTER, 11);
+	createButton(&buttonResumeGame, "Pantaila ukitu jarraitzeko", TEXTALIGN_CENTER, 11);
 	createButton(&buttonGameTime, "Geratzen den denbora: 20 ", TEXTALIGN_RIGHT, 2);
 	createButton(&buttonScore, "Puntuazioa: 0", TEXTALIGN_LEFT, 6);
 }
