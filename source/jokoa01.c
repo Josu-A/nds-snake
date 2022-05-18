@@ -96,22 +96,21 @@ void jokoa01()
 	startClockTimer0(); // 0 denboragailua martxan jarri
 
 	createButtons(); // Pantailaratzeko botoiak sortu
+	showSubBgGameTitleScreen(); // Hasierako jokoaren banner nagusia erakutsi goiko pantailan
 
-	showSubBgGameTitleScreen();
-
-	// Loop nagusia
+	/* Loop nagusia */
 	while(1)
 	{
-		// Jolas mota aukeratzen denerako egoera
+		/* Jolas mota aukeratzen denerako egoera */
 		if (AUTOMATON_STATE == AUTOMATON_SELECTION) 
 		{
 			resetGameConfig(); // Jokoa ondo hasieratzeko aldagaiak hasieratu
 
-			// Azpiko pantailan bi jolas moduen botoiak erakutsi
+			/* Azpiko pantailan bi jolas moduen botoiak erakutsi */
 			showButton(&buttonSelectModeLimited, &bottomScreenConsole);
 			showButton(&buttonSelectModeUnlimited, &bottomScreenConsole);
 
-			// Joku mota aukeratzeko begizta
+			/* Joku mota aukeratzeko begizta */
 			while (selectedGameMode == GAMEMODE_NONE)
 			{
 				touchRead(&PANT_DAT); // Ukimen pantaila eguneratu
@@ -128,20 +127,24 @@ void jokoa01()
 				}
 			}
 
-			// Azpiko pantailako jolas moduen botoiak ezkutatu
+			/* Azpiko pantailako jolas moduen botoiak ezkutatu */
 			hideButton(&buttonSelectModeLimited, &bottomScreenConsole);
 			hideButton(&buttonSelectModeUnlimited, &bottomScreenConsole);
 
-			showMainBgGameplay(); // Jokatze bitartean pantaia nagusiko fondoa ezarri
-			showSubBgGameplayInfo(); // Jokatze bitartean bigarren pantailako fondoa ezarri
+			/* Jokatze bitartean bi pantailako fondoak ezarri*/
+			showMainBgGameplay(); // pantaila nagusia
+			showSubBgGameplayInfo(); // bigarren pantaila
 			
-			showButton(&buttonGameTime, &topScreenConsole); // Goiko pantailan geratzen den denbora testua ezarri
-			showButton(&buttonScore, &topScreenConsole); // Goiko pantailan jokalariak daraman puntuazio testua ezarri
+			/* Goiko pantailan jolasaren informazioaren testua ezarri  */
+			showButton(&buttonGameTime, &topScreenConsole); // denbora testua
+			showButton(&buttonScore, &topScreenConsole); // puntuazio testua
+
 			displayApple(&apple); // Sagarra pantailaratzen da
 			
 			AUTOMATON_STATE = AUTOMATON_PLAYING; // Egoera jolasten ezarri
 		}
-		else if (AUTOMATON_STATE == AUTOMATON_PLAYING) // Jolasean ibiltzeko egoera
+		/* Jolasean ibiltzeko egoera */
+		else if (AUTOMATON_STATE == AUTOMATON_PLAYING)
 		{
 			scanKeys(); // Teklatuaren egoera eguneratzen du libnds-ko funtzioak erabiltzeko
 			updateRotationStateSnakeHead(&snake); // Teklatutik norabide berria lortzen du
@@ -155,23 +158,20 @@ void jokoa01()
 				AUTOMATON_STATE = AUTOMATON_ENDING;
 			}
 		}
-		else if (AUTOMATON_STATE == AUTOMATON_PAUSED) // Jolasa pausatzerako egoera
+		/* Jolasa pausatzerako egoera */
+		else if (AUTOMATON_STATE == AUTOMATON_PAUSED)
 		{
-			touchRead(&PANT_DAT);
-			if (touchedTouchScreen(&PANT_DAT) && ~(keysCurrent() & KEY_LID))
+			touchRead(&PANT_DAT); // Ukimen pantaila eguneratu
+			if (touchedTouchScreen(&PANT_DAT)) // Pantaila ukitu bada
 			{
-				hideButton(&buttonResumeGame, &bottomScreenConsole);
-				AUTOMATON_STATE = AUTOMATON_PLAYING;
+				hideButton(&buttonResumeGame, &bottomScreenConsole); // Pausa testua kendu
+				AUTOMATON_STATE = AUTOMATON_PLAYING; // Jolasten jarraitu
 			}
-		}
-		else if (AUTOMATON_STATE == AUTOMATON_ENDING) // Jolasa bukatzerakoak aukera egiteko egoera
-		{
-			// Nothing for now
 		}
 
 		swiWaitForVBlank(); // Pantailak guztiz errefrekatu arte itxaroten du
 
-		// Bi pantailen OAMak eguneratzen ditu momentuan memorian gordetako spritekin
+		/* Bi pantailen OAMak eguneratzen ditu momentuan memorian gordetako spritekin */
 		oamUpdate(&oamMain);
  		oamUpdate(&oamSub);
 	}

@@ -49,9 +49,7 @@ int bg3Sub;
  * - 8 bit koloreko 256*256 bitmap fondoa 3 fondoan, 64 KB guztira: map-arentzat
  * 1eko oinarriarekin (0x06204000 - 0x06213800 memoria tartea hartu).
  * 
- * D bankua bigarren pantailako spriteak erakusteko hasieratzen da. Bankuak
- * 0x06600000 - 0x0661FFFF memoria tartea hartuko du, 128 KB guztira. Bertan
- * 256 koloreko paleta duten spriteak egongo dira.
+ * D bankua ez da erabiltzen.
  * 
  * E bankua pantaila nagusiko spriteak erakusteko hasieratzen da. Bankuak
  * 0x06400000 - 0x0640FFFF memoria tartea hartuko du, 64 KB guztira. Bertan
@@ -79,7 +77,7 @@ static void initVideo() {
     vramSetPrimaryBanks(VRAM_A_MAIN_BG_0x06020000,
                         VRAM_B_LCD,
                         VRAM_C_SUB_BG_0x06200000,
-                        VRAM_D_SUB_SPRITE);
+                        VRAM_D_LCD);
     vramSetBankE(VRAM_E_MAIN_SPRITE);
     vramSetBankF(VRAM_F_MAIN_BG_0x06000000);
 
@@ -93,8 +91,7 @@ static void initVideo() {
     /*  2. mailako pantaila bideo modua ezarri */
     videoSetModeSub(MODE_3_2D | // 3. bideo modua ezarri
                     DISPLAY_BG2_ACTIVE | // 2. fondoa aktibatu, kontsolarentzat
-                    DISPLAY_BG3_ACTIVE | // 3. fondoa aktibatu, fondoarentzat
-                    DISPLAY_SPR_ACTIVE); // Spriteak pantailaratzeko aktibatu
+                    DISPLAY_BG3_ACTIVE); // 3. fondoa aktibatu, fondoarentzat
 }
 
 /*!
@@ -131,7 +128,7 @@ static void initBackgrounds() {
     REG_BG3Y = 0;
     
     /* Bigarren mailako pantailako 3 fondoa hasieratzen du 256x256 tamainako
-       eta 8 biteko koloredunaren fondoentzat. */
+       eta 8 biteko koloredunaren fondoentzat, eta bere indizea gordetzen du. */
     bg3Sub = bgInitSub(3, BgType_Bmp8, BgSize_B8_256x256, 1, 0);
     bgSetPriority(bg3Sub, BG_PRIORITY(BG_PRIORITY_3)); // Lehentasun baxuena ezarri
 }

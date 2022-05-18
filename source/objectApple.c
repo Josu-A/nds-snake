@@ -15,20 +15,6 @@
 Apple apple;
 
 /*!
- * \brief Sagarraren erakuslea jasota honen posizioa ezartzen da pantailan
- * emandako x eta y balioekin.
- * 
- * \param apple sagar objektuaren erakuslea
- * \param x posizio horizontala, 0tik 15ra (SCREEN_WIDTH_TILES - 1)
- * \param y posizio bertikala,  0tik 11ra (SCREEN_HEIGHT_TILES - 1)
- */
-void setPositionApple(Apple *apple, int x, int y)
-{
-	apple->x = x * APPLE_DIMENSION;
-	apple->y = y * APPLE_DIMENSION;
-}
-
-/*!
  * \brief Zoriz [0, max) tarteko balio bat itzultzen du, max kanpo.
  * 
  * \param max tarteko goi bornea, kanpo
@@ -48,15 +34,15 @@ static long randomMaxValue(long max)
     unsigned long modulus = numRandomVal % (unsigned long) max;
 
     long x; // zorizko aldagaia gordetzeko
-    srand(time(NULL));
+    srand(time(NULL)); // random() funtzoiarentzat seed berria sortu
     do
     {
         x = random(); // 0tik 2^31-1ra zorizko balioa lortu
     }
     while (x >= numRandomVal - modulus); // iterazioa jarraitu distribuzio uniformetik
-                                      // kanpo dugun balio bat lortu ahala
+                                         // kanpo dugun balio bat lortu ahala
     return x / disSize; // distribuzio uniformea emandako balio maximoarekin
-                             // zatitu [0, max) tarteko balio bat lortzeko
+                        // zatitu [0, max) tarteko balio bat lortzeko
 }
 
 /*!
@@ -100,7 +86,7 @@ void newRandomPositionApple(Apple *apple)
     // Kuadrante berria lortu kuadrantea libre dagoen arte
     while (tileContainsSnake(&snake, newTileX, newTileY));
     
-    // Sagarraren posizio berria ezarri pixeletan
+    /* Sagarraren posizio berria ezarri pixeletan */
     apple->x = newTileX * TILE_LENGTH;
     apple->y = newTileY * TILE_LENGTH;
 }
@@ -126,7 +112,7 @@ bool appleCollidesSnake(Apple *apple, Snake *snake)
  */
 void resetApple(Apple *apple)
 {
-    hideApple(apple);
-    newRandomPositionApple(apple);
-    displayApple(apple); // Sagarra pantailaratzen da
+    hideApple(apple); // Sagarra pantailatik kendu
+    newRandomPositionApple(apple); // Posizio berri bat lortu sagarrarentzat
+    displayApple(apple); // Sagarra pantailaratu
 }

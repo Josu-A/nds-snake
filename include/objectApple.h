@@ -27,16 +27,6 @@ typedef struct Apple
 extern Apple apple;
 
 /*!
- * \brief Sagarraren erakuslea jasota honen posizioa ezartzen da pantailan
- * emandako x eta y balioekin.
- * 
- * \param apple sagar objektuaren erakuslea
- * \param x posizio horizontala, 0tik 15ra (SCREEN_WIDTH / APPLE_DIMENSION - 1)
- * \param y posizio bertikala,  0tik 11ra (SCREEN_HEIGHT / APPLE_DIMENSION - 1)
- */
-extern void setPositionApple(Apple *apple, int x, int y);
-
-/*!
  * \brief Parametroz jasotako sagarrarentzat hutsik dagoen posizio berri
  * bat kalkulatzen eta zehazten du.
  * 

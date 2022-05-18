@@ -80,9 +80,6 @@ typedef struct SnakeBody
     int x; // Objektuaren x posizioa gordetzen du
     int y; // Objektuaren y posizioa gordetzen du
 
-    int prevX; // Objektuaren pausu bat atzera izan duen x posizioa
-    int prevY; // Objektuaren pausu bat atzera izan duen y posizioa
-
     u16 *spriteGfxMem; // Spritea gordeko den memoriaren helbidea gordetzen du
     u8 *frameGfx; // Spriteak dituen tile kopurua gordetzen du. Tile bat = 4 pixel dira.
 

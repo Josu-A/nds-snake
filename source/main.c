@@ -9,12 +9,13 @@
 #include "jokoa01.h"
 #include "peripherals.h"
 
+/* Main funtzio nagusia */
 int main(void)
 {
-	hasieratuGrafikoakSpriteak();
-	allowAllInterrupts();
+	hasieratuGrafikoakSpriteak(); // Grafikoak eta spriteak hasieratu
+	allowAllInterrupts(); // Etenak baimendu
 
-	jokoa01();
+	jokoa01(); // Jokoa zehazten duen funtzioa
 
 	return(0);
 }
