@@ -205,8 +205,8 @@ extern void updateRotationStateSnakeTail(Snake *snake);
 
 /*!
  * \brief Sugearen norabide berdineko erakutsi beharreko sub-spritearen
- * posizioa handitzen edo reseteatzen du jolasak spritea aldatzeko (animatzeko)
- * jasotako sugearen erakuslea jasota.
+ * posizioa handitzen edo reseteatzen du jolasak spritea aldatzeko (animatzeko),
+ * jasotako sugearen erakuslearekin.
  * 
  * \param snake suge objektuaren erakuslea
  */

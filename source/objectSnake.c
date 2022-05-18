@@ -34,12 +34,15 @@ SNAKE_DEATH_STATE isSnakeDead = SNAKE_ALIVE;
  */
 static void setPositionSnake(Snake *snake, int x, int y)
 {
+	/* Sugearen buruaren posizioa ezarri jasotako parametroekin */
 	snake->snakeHead.x = x * SNAKE_DIMENSION;
 	snake->snakeHead.y = y * SNAKE_DIMENSION;
 
+	/* Sugearen gorputzaren posizioa ezarri buru atzean */
 	snake->snakeBody[0].x = snake->snakeHead.x - SNAKE_DIMENSION;
 	snake->snakeBody[0].y = snake->snakeHead.y;
 
+	/* Sugearen isatsaren posizioa ezarri gorputz atzean */
 	snake->snakeTail.x = snake->snakeBody[0].x - SNAKE_DIMENSION;
 	snake->snakeTail.y = snake->snakeBody[0].y;
 }
@@ -52,9 +55,9 @@ static void setPositionSnake(Snake *snake, int x, int y)
  */
 static void setDefaultRotationSnake(Snake *snake)
 {
-	snake->snakeHead.state = W_HEAD_RIGHT;
-	snake->snakeBody[0].state = W_BODY_HORIZONTAL;
-	snake->snakeTail.state = W_TAIL_RIGHT;
+	snake->snakeHead.state = W_HEAD_RIGHT; // Burua eskubirantz begira
+	snake->snakeBody[0].state = W_BODY_HORIZONTAL; // Gorputza horizontalean
+	snake->snakeTail.state = W_TAIL_RIGHT; // Isatsa eskubirantz begira
 }
 
 /*!
@@ -67,8 +70,10 @@ static void setDefaultRotationSnake(Snake *snake)
  */
 void moveSnake(Snake *snake)
 {
+	/* Sugea eskubira badoa eta pantaila barruan badago. */
 	if (snake->snakeHead.state == W_HEAD_RIGHT && snake->snakeHead.x <= SCREEN_WIDTH - SNAKE_DIMENSION)
 	{
+		/* Eskubira mugitzeko lekua badu mugitu egingo da. */
 		if (snake->snakeHead.x < SCREEN_WIDTH - SNAKE_DIMENSION)
 		{
 			snake->snakeTail.x = snake->snakeBody[0].x;
@@ -80,6 +85,7 @@ void moveSnake(Snake *snake)
 			snake->snakeHead.x += SNAKE_DIMENSION;
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
+		/* Eskubira mugitzeko lekua ez badu EZ da mugituko. */
 		else
 		{
 			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
@@ -87,9 +93,12 @@ void moveSnake(Snake *snake)
 		}
 			
 	}
+	/* Sugea ezkerrera badoa eta pantaila barruan badago. */
 	else if (snake->snakeHead.state == W_HEAD_LEFT && snake->snakeHead.x >= 0)
 	{
-		if (snake->snakeHead.x > 0) {
+		/* Ezkerrera mugitzeko lekua badu mugitu egingo da. */
+		if (snake->snakeHead.x > 0)
+		{
 			snake->snakeTail.x = snake->snakeBody[0].x;
 			snake->snakeBody[0].x = snake->snakeHead.x;
 
@@ -99,14 +108,17 @@ void moveSnake(Snake *snake)
 			snake->snakeHead.x -= SNAKE_DIMENSION;
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
+		/* Ezkerrera mugitzeko lekua ez badu EZ da mugituko. */
 		else
 		{
 			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 			isSnakeDead = SNAKE_DEAD;
 		}
 	}
+	/* Sugea behera badoa eta pantaila barruan badago. */
 	else if (snake->snakeHead.state == W_HEAD_DOWN && snake->snakeHead.y <= SCREEN_HEIGHT - SNAKE_DIMENSION)
 	{
+		/* Behera mugitzeko lekua badu mugitu egingo da. */
 		if (snake->snakeHead.y < SCREEN_HEIGHT - SNAKE_DIMENSION)
 		{
 			snake->snakeTail.x = snake->snakeBody[0].x;
@@ -118,14 +130,17 @@ void moveSnake(Snake *snake)
 			snake->snakeHead.y += SNAKE_DIMENSION;
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
+		/* Behera mugitzeko lekua ez badu EZ da mugituko. */
 		else
 		{
 			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
 			isSnakeDead = SNAKE_DEAD;
 		}
 	}
+	/* Sugea gora badoa eta pantaila barruan badago. */
 	else if (snake->snakeHead.state == W_HEAD_UP && snake->snakeHead.y >= 0)
 	{
+		/* Gora mugitzeko lekua badu mugitu egingo da. */
 		if (snake->snakeHead.y > 0)
 		{
 			snake->snakeTail.x = snake->snakeBody[0].x;
@@ -137,6 +152,7 @@ void moveSnake(Snake *snake)
 			snake->snakeHead.y -= SNAKE_DIMENSION;
 			canSnakeRotate = SNAKE_CAN_ROTATE;
 		}
+		/* Gora mugitzeko lekua ez badu EZ da mugituko. */
 		else
 		{
 			canSnakeRotate = SNAKE_CAN_NOT_ROTATE;
@@ -207,7 +223,7 @@ void updateRotationStateSnakeBody(Snake *snake)
 	if (canSnakeRotate == SNAKE_CAN_ROTATE)
 	{
 		// if-elseif sententzia honek sugearen gorputzaren biraketa kontrolatuko du
-		// Sprite horizontalera bira
+		/* Sprite horizontalera bira */
 		if ((snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.y == snake->snakeBody[0].y) // Horizontalean doa
 			|| (snake->snakeBody[0].state == W_BODY_NE && snake->snakeHead.y == snake->snakeBody[0].y) // Goi-behetik eskuinera biratu eta eskuinera doa
 			|| (snake->snakeBody[0].state == W_BODY_ES && snake->snakeHead.y == snake->snakeBody[0].y) // Behe-gotik eskuinera biratu eta eskuinera doa
@@ -217,7 +233,7 @@ void updateRotationStateSnakeBody(Snake *snake)
 		{
 			snake->snakeBody[0].state = W_BODY_HORIZONTAL;
 		}
-		// Sprite bertikalera bira
+		/* Sprite bertikalera bira */
 		else if ((snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x == snake->snakeBody[0].x) // Bertikalean doa
 				 || (snake->snakeBody[0].state == W_BODY_NE && snake->snakeHead.x == snake->snakeBody[0].x) // Eskubi-ezkerretik gora biratu eta gorantz doa
 				 || (snake->snakeBody[0].state == W_BODY_ES && snake->snakeHead.x == snake->snakeBody[0].x) // Eskubi-ezkerretik behera biratu eta beherantz doa
@@ -227,7 +243,7 @@ void updateRotationStateSnakeBody(Snake *snake)
 		{
 			snake->snakeBody[0].state = W_BODY_VERTICAL;
 		}
-		// Sprite ipar-ekira bira
+		/* Sprite ipar-ekira bira */
 		else if ((snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.x < snake->snakeTail.x && snake->snakeHead.y < snake->snakeBody[0].y) // Horizontal ezkerretik gora biratu eta gorantz doa 
 				 || (snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x > snake->snakeBody[0].x && snake->snakeHead.y > snake->snakeTail.y) // Bertikal behetik eskubira biratu eta eskubirantz doa
 				 || (snake->snakeBody[0].state == W_BODY_ES && snake->snakeHead.x > snake->snakeBody[0].x && snake->snakeHead.y == snake->snakeBody[0].y) // Eskubi-ezkerretik behera biratu eta behera eskubira doa 
@@ -238,7 +254,7 @@ void updateRotationStateSnakeBody(Snake *snake)
 		{
 			snake->snakeBody[0].state = W_BODY_NE;
 		}
-		// Sprite eki-hegora bira
+		/* Sprite eki-hegora bira */
 		else if ((snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.x < snake->snakeTail.x && snake->snakeHead.y > snake->snakeBody[0].y) // Horizontal ezkerretik behera biratu eta beherantz doa
 				 || (snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x > snake->snakeBody[0].x && snake->snakeHead.y < snake->snakeTail.y) // Bertikal goitik eskubira biratu eta eskubirantz doa
 				 || (snake->snakeBody[0].state == W_BODY_NE && snake->snakeHead.x > snake->snakeBody[0].x && snake->snakeHead.y == snake->snakeBody[0].y) // Eskubi-ezkerretik gora biratu eta gora eskubira doa
@@ -249,7 +265,7 @@ void updateRotationStateSnakeBody(Snake *snake)
 		{
 			snake->snakeBody[0].state = W_BODY_ES;
 		}
-		// Sprite hego-mendera bira
+		/* Sprite hego-mendera bira */
 		else if ((snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.x > snake->snakeTail.x && snake->snakeHead.y > snake->snakeBody[0].y) // Horizontal eskubitik behera biratu eta beherantz doa
 				 || (snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x < snake->snakeBody[0].x && snake->snakeHead.y < snake->snakeTail.y) // Bertikal goitik ezkerrera biratu ezkerrerantz doa
 				 || (snake->snakeBody[0].state == W_BODY_NE && snake->snakeHead.x == snake->snakeBody[0].x && snake->snakeHead.y > snake->snakeBody[0].y) // Eskubi-ezkerretik gora biratu eta gora ezkerrera doa
@@ -260,7 +276,7 @@ void updateRotationStateSnakeBody(Snake *snake)
 		{
 			snake->snakeBody[0].state = W_BODY_SW;
 		}
-		// Sprite mende-iparrera bira
+		/* Sprite mende-iparrera bira */
 		else if ((snake->snakeBody[0].state == W_BODY_HORIZONTAL && snake->snakeHead.x > snake->snakeTail.x && snake->snakeHead.y < snake->snakeBody[0].y) // Horizontal eskubitik gora biratu eta gorantz doa
 				 || (snake->snakeBody[0].state == W_BODY_VERTICAL && snake->snakeHead.x < snake->snakeBody[0].x && snake->snakeHead.y > snake->snakeTail.y) // Bertikal behetik ezkerrera biratu eta ezkerrerantz doa
 				 || (snake->snakeBody[0].state == W_BODY_NE && snake->snakeHead.x == snake->snakeBody[0].x && snake->snakeHead.y < snake->snakeBody[0].y) // Goi-behetik eskubira biratu eta eskubi gora doa
@@ -325,8 +341,8 @@ void updateRotationStateSnakeTail(Snake *snake)
 
 /*!
  * \brief Sugearen norabide berdineko erakutsi beharreko sub-spritearen
- * posizioa handitzen edo reseteatzen du jolasak spritea aldatzeko (animatzeko)
- * jasotako sugearen erakuslea jasota.
+ * posizioa handitzen edo reseteatzen du jolasak spritea aldatzeko (animatzeko),
+ * jasotako sugearen erakuslearekin.
  * 
  * \param snake suge objektuaren erakuslea
  */
