@@ -81,6 +81,28 @@ static bool touchedTouchScreen(touchPosition *touchPad)
 }
 
 /*!
+ * \brief Joku mota lortzen du ukimen-pantaila eta pantailaratutako botoiak erabiliz.
+ */
+static void chooseGameMode()
+{
+	/* Joku mota aukeratzeko begizta */
+	while (selectedGameMode == GAMEMODE_NONE)
+	{
+		touchRead(&PANT_DAT); // Ukimen pantaila eguneratu
+		// Bukatzen den moduaren testuaren gainean ukitu ezkero
+		if (touchedInsideButton(&buttonSelectModeLimited, &PANT_DAT))
+		{
+			selectedGameMode = GAMEMODE_LIMITED; // Bukatzen den modua gorde
+		}
+		// Bukatzen ez den moduaren testuaren gainean ukitu ezkero
+		else if (touchedInsideButton(&buttonSelectModeUnlimited, &PANT_DAT))
+		{
+			selectedGameMode = GAMEMODE_UNLIMITED; // Bukatzen ez den modua gorde
+		}
+	}
+}
+
+/*!
  * \brief Jokoaren logika zehazten du.
  */
 void jokoa01()
@@ -110,22 +132,8 @@ void jokoa01()
 			showButton(&buttonSelectModeLimited, &bottomScreenConsole);
 			showButton(&buttonSelectModeUnlimited, &bottomScreenConsole);
 
-			/* Joku mota aukeratzeko begizta */
-			while (selectedGameMode == GAMEMODE_NONE)
-			{
-				touchRead(&PANT_DAT); // Ukimen pantaila eguneratu
-
-				// Bukatzen den moduaren testuaren gainean ukitu ezkero
-				if (touchedInsideButton(&buttonSelectModeLimited, &PANT_DAT))
-				{
-					selectedGameMode = GAMEMODE_LIMITED; // Bukatzen den modua gorde
-				}
-				// Bukatzen ez den moduaren testuaren gainean ukitu ezkero
-				else if (touchedInsideButton(&buttonSelectModeUnlimited, &PANT_DAT))
-				{
-					selectedGameMode = GAMEMODE_UNLIMITED; // Bukatzen ez den modua gorde
-				}
-			}
+			/* Jolas modua aukeratu */
+			chooseGameMode();
 
 			/* Azpiko pantailako jolas moduen botoiak ezkutatu */
 			hideButton(&buttonSelectModeLimited, &bottomScreenConsole);
@@ -151,12 +159,6 @@ void jokoa01()
 			animateSnake(&snake); // Eguneratutako sub-sprite berria memorian ezartzen du erakusteko
 
 			showRealTimeTimer(timeLeftToPlay, &timeLeftToPlayNormalized, &topScreenConsole, 29, 2);
-
-			// Bukatzen den modua aukeratuz gero eta puntuazio maximora iristerakoan, jokoa amaitu.
-			if (selectedGameMode == GAMEMODE_LIMITED && score == MAX_SCORE)
-			{
-				AUTOMATON_STATE = AUTOMATON_ENDING;
-			}
 		}
 		/* Jolasa pausatzerako egoera */
 		else if (AUTOMATON_STATE == AUTOMATON_PAUSED)
