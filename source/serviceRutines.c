@@ -123,6 +123,7 @@ void interruptTimer0()
 				if (score <= maxIntScoreAllowedToAdd()) // integer overflow gertatu ez dadin check-a
 					score += SCORE_INCREMENT;
 				/* Puntuazio eguneratua pantailaratu */
+				consoleSelect(&topScreenConsole);
 				iprintf("\x1b[%d;%dH%d", buttonScore.y,
 				        buttonScore.x + buttonScore.contentLength - 1,
 						score);
@@ -150,6 +151,10 @@ void interruptTimer0()
 					hideSnake(&snake);
 					hideApple(&apple);
 
+					/* Irabazi dela adierazi beheko pantailan */
+					consoleSelect(&bottomScreenConsole);
+					iprintf("\x1b[%d;%dH%s", 11, 5, "Zorionak, Irabazi Duzu");
+
 					AUTOMATON_STATE = AUTOMATON_ENDING; // Jolas bukaera egoerara igaro
 				}
 			}
@@ -161,7 +166,8 @@ void interruptTimer0()
 			hideSnake(&snake);
 			hideApple(&apple);
 
-			isSnakeDead = SNAKE_DEAD; // Sugea hil dela gorde
+			consoleSelect(&bottomScreenConsole);
+			iprintf("\x1b[%d;%dH%s", 11, 8, "Jokoa Bukatu Da!");
 
 			AUTOMATON_STATE = AUTOMATON_ENDING; // Jolas bukaera egoerara igaro
 		}
@@ -174,19 +180,6 @@ void interruptTimer0()
 		               // geratzen den denborari bat kendu
 		// Aukera egiteko geratzen diren segunduak pantailaratu
 		showRealTimeTimer(endingTimer, &endingTimerNormalized, &topScreenConsole, 12, 15);
-
-		// Sugea bizirik badago, jokoa irabazi dela esan nahi du
-		if (isSnakeDead == SNAKE_ALIVE)
-		{
-			consoleSelect(&bottomScreenConsole);
-			iprintf("\x1b[%d;%dH%s", 6, 2, "You won, apparently!");
-		}
-		// Sugea hilik badago, jokoa galdu dela esan nahi du
-		else
-		{
-			consoleSelect(&bottomScreenConsole);
-			iprintf("\x1b[%d;%dH%s", 6, 2, "You lost, looser!");
-		}
 
 		if (endingTimer == 0)
 		{

@@ -171,9 +171,9 @@ void jokoa01()
 
 		swiWaitForVBlank(); // Pantailak guztiz errefrekatu arte itxaroten du
 
-		/* Bi pantailen OAMak eguneratzen ditu momentuan memorian gordetako spritekin */
+		/* Pantaila nagusiareb OAM eguneratzen du momentuan memorian gordetako
+		   spritekin */
 		oamUpdate(&oamMain);
- 		oamUpdate(&oamSub);
 	}
 
 	/* Loop nagusia bukatzean egin beharko litzateken eragiketak, gure kasuan
