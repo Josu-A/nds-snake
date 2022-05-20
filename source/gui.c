@@ -38,6 +38,16 @@ Button buttonEndGameTime;
 Button buttonPressToRestart;
 
 /*!
+ * \brief Partida bukatzean agertzen den testua.
+ */
+Button buttonGameOver;
+
+/*!
+ * \brief Partida irabaztean agertzen den testua.
+ */
+Button buttonGameOverWin;
+
+/*!
  * \brief Jokalariak daraman puntuazioa erakusteko testua.
  */
 Button buttonScore;
@@ -91,7 +101,9 @@ void createButtons()
 	createButton(&buttonGameTime, "Geratzen den denbora: 20 ", TEXTALIGN_RIGHT, 2);
 	createButton(&buttonEndGameTime, "Atzera itzultzen: 10 ", TEXTALIGN_RIGHT, 2);
 	createButton(&buttonScore, "Puntuazioa: 0", TEXTALIGN_LEFT, 6);
-	createButton(&buttonPressToRestart, "SELECT sakatu berriro jolasteko", TEXTALIGN_CENTER, 18);
+	createButton(&buttonPressToRestart, "SELECT berriro jokatzeko", TEXTALIGN_CENTER, 13);
+	createButton(&buttonGameOver, "Jokoa Bukatu Da!", TEXTALIGN_CENTER, 11);
+	createButton(&buttonGameOverWin, "Zorionak, Irabazi Duzu!", TEXTALIGN_CENTER, 11);
 }
 
 /*!
@@ -122,15 +134,25 @@ void hideButton(Button *button, PrintConsole *screenConsole)
 	iprintf("\x1b[%d;%dH%s", button->y, 0, "                                ");
 }
 
-void pressStartAnimate()
+/*!
+ * \brief Segundu erdiro START sakatzeko pantailaratuko eta ezabatuko du
+ * zehaztutako posizioan eta kontsolan.
+ * 
+ * \param screenConsole zein pantailako kontsolan pantailarazi nahi den
+ * \param x x posizioa [0, 31] tartean
+ * \param y y posizioa [0, 23] tartean
+ */
+void pressStartAnimate(PrintConsole *screenConsole, int x, int y)
 {
-	static int seg1;
+	static int seg1; // kontagailua
 	seg1++;
+	// segundu erdira iristean kontagailua mezua pantailaratu
 	if (seg1 == SEG_0_5)
 	{
 		consoleSelect(&bottomScreenConsole);
-		iprintf("\x1b[%d;%dH%s", 11, 4, "Sakatu START jarraitzeko");
+		iprintf("\x1b[%d;%dH%s", y, x, "Sakatu START jarraitzeko");
 	}
+	// segundu osora iristean kontagailua mezua ezkutatu
 	else if (seg1 == SEG_1)
 	{
 		consoleSelect(&bottomScreenConsole);
@@ -139,11 +161,23 @@ void pressStartAnimate()
 	}
 }
 
+/*!
+ * \brief Adierazten den kontsolan jasotako etenetan dagoen denboragailuaren
+ * balioarekin segundutan dagoen denboragailua kalkulatzen eta pantailaratzen du
+ * eskubian lerrokatuta, zehaztutako posizioan.
+ * 
+ * \param interruptTimer etenetan dagoen denboragailua
+ * \param secTimer segundutan egongo den denboragailuaren erakuslea
+ * \param console zein pantailan adieraziko den kontsola
+ * \param x x posizioa [0, 31] tartean
+ * \param y y posizioa [0, 23] tartean
+ */
 void showRealTimeTimer(int interruptTimer, int *secTimer, PrintConsole *console, int x, int y)
 {
-	*secTimer = interruptTimer / ETEN_SEGUNDUKO;
-	if (interruptTimer % SEG_1 == 0)
+	*secTimer = interruptTimer / ETEN_SEGUNDUKO; // etenetatik segunduak lortu
+	if (interruptTimer % SEG_1 == 0) // segundu bat pasa baldin bada 
 	{
+		// Zenbakia eskubian lerrokatu digituak konprobatuz
 		consoleSelect(console);
 		if (*secTimer / 10 != 0)
 		{

@@ -60,6 +60,16 @@ extern Button buttonEndGameTime;
 extern Button buttonPressToRestart;
 
 /*!
+ * \brief Partida bukatzean agertzen den testua.
+ */
+extern Button buttonGameOver;
+
+/*!
+ * \brief Partida irabaztean agertzen den testua.
+ */
+extern Button buttonGameOverWin;
+
+/*!
  * \brief Jokalariak daraman puntuazioa erakusteko testua.
  */
 extern Button buttonScore;
@@ -89,8 +99,28 @@ extern void showButton(Button *button, PrintConsole *screenConsole);
  */
 extern void hideButton(Button *button, PrintConsole *screenConsole);
 
+/*!
+ * \brief Segundu erdiro START sakatzeko pantailaratuko eta ezabatuko du
+ * zehaztutako posizioan eta kontsolan.
+ * 
+ * \param screenConsole zein pantailako kontsolan pantailarazi nahi den
+ * \param x x posizioa [0, 31] tartean
+ * \param y y posizioa [0, 23] tartean
+ */
+extern void pressStartAnimate(PrintConsole *screenConsole, int x, int y);
+
+/*!
+ * \brief Adierazten den kontsolan jasotako etenetan dagoen denboragailuaren
+ * balioarekin segundutan dagoen denboragailua kalkulatzen eta pantailaratzen du
+ * eskubian lerrokatuta, zehaztutako posizioan.
+ * 
+ * \param interruptTimer etenetan dagoen denboragailua
+ * \param secTimer segundutan egongo den denboragailuaren erakuslea
+ * \param console zein pantailan adieraziko den kontsola
+ * \param x x posizioa [0, 31] tartean
+ * \param y y posizioa [0, 23] tartean
+ */
 extern void showRealTimeTimer(int interruptTimer, int *secTimer, PrintConsole *console, int x, int y);
-extern void pressStartAnimate();
 
 /*!
  * \brief Emandako kontsolatik zehaztutako borneen arteko karaktereak garbitzen

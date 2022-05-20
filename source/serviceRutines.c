@@ -89,8 +89,9 @@ void interruptTimer0()
 	   animatzen du. */
 	if (AUTOMATON_STATE == AUTOMATON_START)
 	{
-		pressStartAnimate(); // Segundu erdiko tartearekin fade-in fade-out animazioa
-		                     // egiten du, jarraitzeko sakatu behar den botoia adieraziz
+		/* Segundu erdiko tartearekin fade-in fade-out animazioa egiten du,
+		   jarraitzeko sakatu behar den botoia adieraziz. */
+		pressStartAnimate(&bottomScreenConsole, 4, 11);
 	}
 	/* Jokatu bitartean sugearen eta sagarraren fisikak kontrolatzen ditu */
 	else if (AUTOMATON_STATE == AUTOMATON_PLAYING)
@@ -153,11 +154,13 @@ void interruptTimer0()
 
 					/* Irabazi dela adierazi beheko pantailan */
 					consoleSelect(&bottomScreenConsole);
-					iprintf("\x1b[%d;%dH%s", 11, 5, "Zorionak, Irabazi Duzu");
-					hideButton(&buttonGameTime, &topScreenConsole);
-					showButton(&buttonEndGameTime, &topScreenConsole);
+					showButton(&buttonGameOverWin, &bottomScreenConsole);
 					showButton(&buttonPressToRestart, &bottomScreenConsole);
 
+					/* Jokatzeko denbora testua atzera itzultzekoaren aldatu. */
+					hideButton(&buttonGameTime, &topScreenConsole);
+					showButton(&buttonEndGameTime, &topScreenConsole);
+					
 					AUTOMATON_STATE = AUTOMATON_ENDING; // Jolas bukaera egoerara igaro
 				}
 			}
@@ -169,11 +172,14 @@ void interruptTimer0()
 			hideSnake(&snake);
 			hideApple(&apple);
 
+			/* Partida bukatu dela adierazi beheko pantailan */
 			consoleSelect(&bottomScreenConsole);
-			iprintf("\x1b[%d;%dH%s", 11, 8, "Jokoa Bukatu Da!");
+			showButton(&buttonGameOver, &bottomScreenConsole);
+			showButton(&buttonPressToRestart, &bottomScreenConsole);
+
+			/* Jokatzeko denbora testua atzera itzultzekoaren aldatu. */
 			hideButton(&buttonGameTime, &topScreenConsole);
 			showButton(&buttonEndGameTime, &topScreenConsole);
-			showButton(&buttonPressToRestart, &bottomScreenConsole);
 
 			AUTOMATON_STATE = AUTOMATON_ENDING; // Jolas bukaera egoerara igaro
 		}
