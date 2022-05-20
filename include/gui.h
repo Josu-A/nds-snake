@@ -50,6 +50,16 @@ extern Button buttonResumeGame;
 extern Button buttonGameTime;
 
 /*!
+ * \brief Jolasa bukatzean selekzio pantailara itzultzeko testua.
+ */
+extern Button buttonEndGameTime;
+
+/*!
+ * \brief Berriz jolasteko esaten duen testua gordetzen duen botoia.
+ */
+extern Button buttonPressToRestart;
+
+/*!
  * \brief Jokalariak daraman puntuazioa erakusteko testua.
  */
 extern Button buttonScore;

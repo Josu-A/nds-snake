@@ -28,6 +28,16 @@ Button buttonResumeGame;
 Button buttonGameTime;
 
 /*!
+ * \brief Jolasa bukatzean selekzio pantailara itzultzeko testua.
+ */
+Button buttonEndGameTime;
+
+/*!
+ * \brief Berriz jolasteko esaten duen testua gordetzen duen botoia.
+ */
+Button buttonPressToRestart;
+
+/*!
  * \brief Jokalariak daraman puntuazioa erakusteko testua.
  */
 Button buttonScore;
@@ -79,7 +89,9 @@ void createButtons()
 	createButton(&buttonSelectModeUnlimited, "MUGARIK GABEA", TEXTALIGN_CENTER, 15);
 	createButton(&buttonResumeGame, "Pantaila ukitu jarraitzeko", TEXTALIGN_CENTER, 11);
 	createButton(&buttonGameTime, "Geratzen den denbora: 20 ", TEXTALIGN_RIGHT, 2);
+	createButton(&buttonEndGameTime, "Atzera itzultzen: 10 ", TEXTALIGN_RIGHT, 2);
 	createButton(&buttonScore, "Puntuazioa: 0", TEXTALIGN_LEFT, 6);
+	createButton(&buttonPressToRestart, "SELECT sakatu berriro jolasteko", TEXTALIGN_CENTER, 18);
 }
 
 /*!

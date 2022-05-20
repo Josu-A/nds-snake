@@ -154,6 +154,9 @@ void interruptTimer0()
 					/* Irabazi dela adierazi beheko pantailan */
 					consoleSelect(&bottomScreenConsole);
 					iprintf("\x1b[%d;%dH%s", 11, 5, "Zorionak, Irabazi Duzu");
+					hideButton(&buttonGameTime, &topScreenConsole);
+					showButton(&buttonEndGameTime, &topScreenConsole);
+					showButton(&buttonPressToRestart, &bottomScreenConsole);
 
 					AUTOMATON_STATE = AUTOMATON_ENDING; // Jolas bukaera egoerara igaro
 				}
@@ -168,6 +171,9 @@ void interruptTimer0()
 
 			consoleSelect(&bottomScreenConsole);
 			iprintf("\x1b[%d;%dH%s", 11, 8, "Jokoa Bukatu Da!");
+			hideButton(&buttonGameTime, &topScreenConsole);
+			showButton(&buttonEndGameTime, &topScreenConsole);
+			showButton(&buttonPressToRestart, &bottomScreenConsole);
 
 			AUTOMATON_STATE = AUTOMATON_ENDING; // Jolas bukaera egoerara igaro
 		}
@@ -179,7 +185,7 @@ void interruptTimer0()
 		endingTimer--; // Etenaldietan adierazitako aukeraketa pantailarako joateko
 		               // geratzen den denborari bat kendu
 		// Aukera egiteko geratzen diren segunduak pantailaratu
-		showRealTimeTimer(endingTimer, &endingTimerNormalized, &topScreenConsole, 12, 15);
+		showRealTimeTimer(endingTimer, &endingTimerNormalized, &topScreenConsole, 29, 2);
 
 		if (endingTimer == 0)
 		{
